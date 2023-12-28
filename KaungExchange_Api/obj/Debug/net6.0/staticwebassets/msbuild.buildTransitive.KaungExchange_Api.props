@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\KaungExchange_Api.props" />
+</Project>
