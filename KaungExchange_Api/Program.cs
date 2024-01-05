@@ -11,6 +11,7 @@ builder.Services.AddDbContext<EFDBContext>
     (options => options.UseSqlServer(builder.Configuration.GetConnectionString("KaungDBConnection")));
 
 builder.Services.AddScoped<UserServices>();
+builder.Services.AddScoped<AccountServices>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
