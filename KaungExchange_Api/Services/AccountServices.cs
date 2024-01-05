@@ -90,10 +90,10 @@ namespace KaungExchange_Api.Services
                 if (entities != null)
                 {
                     entities.Id = entities.Id;
-                    entities.Staff = model.Staff;
-                    entities.AccountNo = model.AccountNo;
-                    entities.AccountUserName = model.AccountUserName;
-                    entities.InitialAmount = model.InitialAmount;
+                    entities.Staff = entities.Staff;
+                    entities.AccountNo = entities.AccountNo;
+                    entities.AccountUserName = entities.AccountUserName;
+                    entities.InitialAmount = entities.InitialAmount;
                     entities.IsDeleted = true;
                     _dbContext.Account.Update(entities);
                     return await _dbContext.SaveChangesAsync();
