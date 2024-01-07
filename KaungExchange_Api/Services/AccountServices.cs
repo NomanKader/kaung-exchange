@@ -39,15 +39,29 @@ namespace KaungExchange_Api.Services
         {
             try
             {
-                return await _dbContext.Account.Where(x => x.IsDeleted == false).Select(x => new AccountModel()
-                {
-                    Id = x.Id,
-                    Staff = x.Staff,
-                    AccountNo = x.AccountNo,
-                    AccountUserName = x.AccountUserName,
-                    InitialAmount = x.InitialAmount,
-                    CreatedDate = DateTime.Now,
-                }).ToListAsync();
+                //return await _dbContext.Account.Where(x => x.IsDeleted == false).Select(x => new AccountModel()
+                //{
+                //    Id = x.Id,
+                //    Staff = x.Staff,
+                //    AccountNo = x.AccountNo,
+                //    AccountUserName = x.AccountUserName,
+                //    InitialAmount = x.InitialAmount,
+                //    CreatedDate = DateTime.Now,
+                //}).ToListAsync();
+                return (from a in _dbContext.Account
+                        join u in _dbContext.User on a.Staff equals u.Id
+                        where a.IsDeleted == false
+                        select new AccountModel()
+                        {
+                            Id = a.Id,
+                            Staff = a.Staff,
+                            StaffName = u.UserName,
+                            AccountNo = a.AccountNo,
+                            WalletType = a.WalletType,
+                            AccountUserName = a.AccountUserName,
+                            InitialAmount = a.InitialAmount,
+                            CreatedDate = DateTime.Now,
+                        }).ToList();
             }
             catch (Exception ex)
             {
@@ -66,6 +80,7 @@ namespace KaungExchange_Api.Services
                     entities.Id = model.Id;
                     entities.Staff = model.Staff;
                     entities.AccountNo = model.AccountNo;
+                    entities.WalletType = model.WalletType;
                     entities.AccountUserName = model.AccountUserName;
                     entities.InitialAmount = model.InitialAmount;
 
