@@ -21,6 +21,7 @@ namespace KaungExchange_Api.Services
                 #region DataMapping
                 entities.Staff = model.Staff;
                 entities.AccountNo = model.AccountNo;
+                entities.WalletType = model.WalletType;
                 entities.AccountUserName = model.AccountUserName;
                 entities.InitialAmount = model.InitialAmount;
                 entities.CreatedDate = DateTime.Now;
