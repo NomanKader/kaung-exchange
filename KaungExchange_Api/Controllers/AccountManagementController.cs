@@ -14,7 +14,7 @@ namespace KaungExchange_Api.Controllers
             _accountSerivces = accountSerivces;
         }
 
-        [Route("api/account")]
+        [Route("api/wallet")]
         [HttpPost]
         public async Task<IActionResult> CreateAccountControl([FromBody] AccountModel model)
         {
@@ -22,7 +22,7 @@ namespace KaungExchange_Api.Controllers
             return dataResult > 0 ? StatusCode(StatusCodes.Status200OK) : StatusCode(StatusCodes.Status202Accepted);
         }
 
-        [Route("api/account")]
+        [Route("api/wallet")]
         [HttpGet]
         public async Task<IActionResult> GetAccountControllerList()
         {
@@ -30,7 +30,7 @@ namespace KaungExchange_Api.Controllers
             return Content(JsonConvert.SerializeObject(dataResult), "application/json");
         }
 
-        [Route("api/account")]
+        [Route("api/wallet")]
         [HttpPut]
         public async Task<IActionResult> UpdateAccountController([FromBody] AccountModel model)
         {
@@ -38,7 +38,7 @@ namespace KaungExchange_Api.Controllers
             return dataResult > 0 ? StatusCode(StatusCodes.Status200OK) : StatusCode(StatusCodes.Status202Accepted);
         }
 
-        [Route("api/account")]
+        [Route("api/wallet")]
         [HttpDelete]
         public async Task<IActionResult> DeleteAccountController([FromBody] AccountModel model)
         {
