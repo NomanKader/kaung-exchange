@@ -17,18 +17,38 @@ namespace KaungExchange_Api.Services
         {
             try
             {
-                AccountEntities entities = new AccountEntities();
-                #region DataMapping
-                entities.Staff = model.Staff;
-                entities.AccountNo = model.AccountNo;
-                entities.WalletType = model.WalletType;
-                entities.AccountUserName = model.AccountUserName;
-                entities.InitialAmount = model.InitialAmount;
-                entities.CreatedDate = DateTime.Now;
-                entities.IsDeleted = false;
-                #endregion
-                await _dbContext.Account.AddAsync(entities);
+                if (CheckWalletAccountExist(model.AccountNo, model.WalletType))
+                {
+                    AccountEntities entities = new AccountEntities();
+                    #region DataMapping
+                    entities.Staff = model.Staff;
+                    entities.AccountNo = model.AccountNo;
+                    entities.WalletType = model.WalletType;
+                    entities.AccountUserName = model.AccountUserName;
+                    entities.InitialAmount = model.InitialAmount;
+                    entities.CreatedDate = DateTime.Now;
+                    entities.IsDeleted = false;
+                    #endregion
+                    await _dbContext.Account.AddAsync(entities);
+                }
                 return await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public bool CheckWalletAccountExist(string accountNo, string walletType)
+        {
+            try
+            {
+                var dataResult = _dbContext.Account.Where(x => x.AccountNo == accountNo && x.WalletType == walletType).FirstOrDefault();
+                if (dataResult != null)
+                {
+                    return true;
+                }
+                return false;
             }
             catch (Exception ex)
             {
