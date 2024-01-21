@@ -1,6 +1,7 @@
 ﻿using KaungExchange_Api.Models.Entities;
 using KaungExchange_Api.Services;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace KaungExchange_Api.Controllers
 {
@@ -29,6 +30,14 @@ namespace KaungExchange_Api.Controllers
             var dataResult = await _service.SetupTransferRate(model);
             return dataResult > 0 ? StatusCode(StatusCodes.Status200OK, "Success") :
                 StatusCode(StatusCodes.Status202Accepted);
+        }
+
+        [Route("api/transferrate")]
+        [HttpGet]
+        public async Task<IActionResult> GetTransferRateList()
+        {
+            var dataResult = await _service.TransferRateList();
+            return Content(JsonConvert.SerializeObject(dataResult), "application/json");
         }
     }
 }

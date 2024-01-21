@@ -35,7 +35,7 @@ namespace KaungExchange_Api.Services
         {
             try
             {
-                
+
                 TransferRateEntities entities = new TransferRateEntities();
                 entities = await _dbContext.TransferRate.AsNoTracking().Where(x => x.Id == model.Id).FirstOrDefaultAsync();
                 if (entities != null)
@@ -48,6 +48,24 @@ namespace KaungExchange_Api.Services
                     _dbContext.TransferRate.Update(entities);
                 }
                 return await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<List<TransferRateModel>> TransferRateList()
+        {
+            try
+            {
+                return await _dbContext.TransferRate.Select(x => new TransferRateModel()
+                {
+                    Id = x.Id,
+                    Wallet = x.Wallet,
+                    CashIn_Percentage = x.CashIn_Percentage,
+                    CashOut_Percentage = x.CashOut_Percentage
+                }).ToListAsync();
             }
             catch (Exception ex)
             {
