@@ -12,6 +12,7 @@ builder.Services.AddDbContext<EFDBContext>
 
 builder.Services.AddScoped<UserServices>();
 builder.Services.AddScoped<AccountServices>();
+builder.Services.AddScoped<TransferRateServices>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

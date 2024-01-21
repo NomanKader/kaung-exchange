@@ -8,5 +8,6 @@ namespace KaungExchange_Api.Services
         public EFDBContext(DbContextOptions options) : base(options) { }
         public DbSet<UserEntities> User { get; set; }
         public DbSet<AccountEntities> Account { get; set; }
+        public DbSet<TransferRateEntities> TransferRate { get; set; }
     }
 }
