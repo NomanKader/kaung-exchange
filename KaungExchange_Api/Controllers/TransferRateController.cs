@@ -27,7 +27,7 @@ namespace KaungExchange_Api.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateTransferRate([FromBody] TransferRateModel model)
         {
-            var dataResult = await _service.SetupTransferRate(model);
+            var dataResult = await _service.UpdateTransferRate(model);
             return dataResult > 0 ? StatusCode(StatusCodes.Status200OK, "Success") :
                 StatusCode(StatusCodes.Status202Accepted);
         }
