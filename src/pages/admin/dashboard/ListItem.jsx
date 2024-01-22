@@ -11,8 +11,10 @@ import {
   SellOutlined,
   Money,
   MonetizationOn,
+  TransferWithinAStation,
 } from "@mui/icons-material";
 import DecryptDataComponent from "../../../data/aes/DecryptData";
+import theme from "../../../theme";
 
 export const mainListItems = (history) => {
   const userRole = DecryptDataComponent(sessionStorage.getItem("userRole"));
@@ -21,17 +23,17 @@ export const mainListItems = (history) => {
     <React.Fragment>
       {userRole === "Admin" ? (
         <>
-          {/* <ListItemButton onClick={() => history.push("/admin/dashboard")}>
-            <ListItemIcon>
-              <DashboardIcon />
-            </ListItemIcon>
-            <ListItemText primary="Dashboard" />
-          </ListItemButton> */}
           <ListItemButton onClick={() => history.push("/admin/mobilemoney")}>
-            <ListItemIcon>
-              <MonetizationOn/>
+            <ListItemIcon iconColor={theme.palette.primary.main}>
+              <MonetizationOn iconColor={theme.palette.primary.main}/>
             </ListItemIcon>
             <ListItemText primary="Wallet" />
+          </ListItemButton>
+          <ListItemButton onClick={() => history.push("/admin/transferrate")}>
+            <ListItemIcon>
+              <TransferWithinAStation/>
+            </ListItemIcon>
+            <ListItemText primary="Transfer Rate" />
           </ListItemButton>
           {/* <ListItemButton onClick={() => history.push("/admin/stock")}>
             <ListItemIcon>

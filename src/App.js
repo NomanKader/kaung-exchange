@@ -6,6 +6,7 @@ import UserPage from './pages/admin/user/UserPage';
 import SalePage from './pages/cashier/SalePage';
 import ReportPage from './pages/admin/report/ReportPage';
 import MobileMoneyPage from './pages/admin/mobilemoney/MobileMoneyPage';
+import TransferRatePage from './pages/admin/transferrate/TransferRatePage';
 export default function App({history}) {
   return(
     <Router>
@@ -15,6 +16,7 @@ export default function App({history}) {
         <Route exact path='/admin/mobilemoney' component={MobileMoneyPage}/>
         <Route exact path='/admin/stock' component={StockPage}/>
         <Route exact path='/admin/report' component={ReportPage}/>
+        <Route exact path='/admin/transferrate' component={TransferRatePage}/>
         <Route exact path='/admin/user' component={UserPage}/>
         <Route exact path='/staff/sale' component={SalePage}/>        
       </Switch>
