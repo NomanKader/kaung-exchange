@@ -5,6 +5,7 @@ const GetWalletAPI=async(setWalletList,setShowBackDrop,toast)=>{
     .then((res)=>{
         setWalletList(res.data);        
     }).catch((err)=>{
+        setShowBackDrop(false);
         console.error(err);
         toast.error("System Error");
     })

@@ -8,6 +8,7 @@ const GetTransferRateAPI=async(setTransferList,setShowBackDrop)=>{
       setShowBackDrop(false);
     })
     .catch((error) => {
+      setShowBackDrop(false);      
       console.error("Error fetching users:", error);
     });
 }

@@ -14,7 +14,8 @@ const CreateTransferRateAPI = async (postBody,setTransferList,setShowBackDrop,se
     })
     .catch((error) => {
       if(error.response.status==409){
-        toast.error("Transfer Rates Already Exists");
+        setShowBackDrop(false);
+        toast.warning("Transfer Rates Already Exists");
       }
       else{
         toast.error(error);

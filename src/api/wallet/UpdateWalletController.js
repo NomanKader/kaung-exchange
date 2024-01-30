@@ -11,6 +11,7 @@ const UpdateWalletAPI=async(postBody,setWalletList,setShowBackDrop,toast)=>{
         }
     }).catch(err=>{
         if(err.response.status==409){
+            setShowBackDrop(false);
             toast.warning('Wallet Already Exist');
         }
         else{
