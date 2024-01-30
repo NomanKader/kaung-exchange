@@ -19,7 +19,7 @@ namespace KaungExchange_Api.Controllers
         public async Task<IActionResult> CreateAccountControl([FromBody] AccountModel model)
         {
             var dataResult = await _accountSerivces.CreateAccountControl(model);
-            return dataResult > 0 ? StatusCode(StatusCodes.Status200OK) : StatusCode(StatusCodes.Status202Accepted);
+            return dataResult > 0 ? StatusCode(StatusCodes.Status200OK) : StatusCode(StatusCodes.Status409Conflict);
         }
 
         [Route("api/wallet")]
@@ -35,7 +35,7 @@ namespace KaungExchange_Api.Controllers
         public async Task<IActionResult> UpdateAccountController([FromBody] AccountModel model)
         {
             var dataResult = await _accountSerivces.UpdateAccountController(model);
-            return dataResult > 0 ? StatusCode(StatusCodes.Status200OK) : StatusCode(StatusCodes.Status202Accepted);
+            return dataResult > 0 ? StatusCode(StatusCodes.Status200OK) : StatusCode(StatusCodes.Status409Conflict);
         }
 
         [Route("api/wallet")]

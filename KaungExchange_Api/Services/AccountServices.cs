@@ -30,8 +30,9 @@ namespace KaungExchange_Api.Services
                     entities.IsDeleted = false;
                     #endregion
                     await _dbContext.Account.AddAsync(entities);
+                    return await _dbContext.SaveChangesAsync();
                 }
-                return await _dbContext.SaveChangesAsync();
+                return 0;
             }
             catch (Exception ex)
             {
@@ -95,18 +96,22 @@ namespace KaungExchange_Api.Services
             try
             {
                 AccountEntities entities = new AccountEntities();
-                entities = await _dbContext.Account.AsNoTracking().Where(x => x.Id == model.Id).FirstOrDefaultAsync();
-                if (entities != null)
+                if (CheckWalletAccountExist(model.AccountNo, model.WalletType))
                 {
-                    entities.Id = model.Id;
-                    entities.Staff = model.Staff;
-                    entities.AccountNo = model.AccountNo;
-                    entities.WalletType = model.WalletType;
-                    entities.AccountUserName = model.AccountUserName;
-                    entities.InitialAmount = model.InitialAmount;
+                    entities = await _dbContext.Account.AsNoTracking().Where(x => x.Id == model.Id).FirstOrDefaultAsync();
+                    if (entities != null)
+                    {
+                        entities.Id = model.Id;
+                        entities.Staff = model.Staff;
+                        entities.AccountNo = model.AccountNo;
+                        entities.WalletType = model.WalletType;
+                        entities.AccountUserName = model.AccountUserName;
+                        entities.InitialAmount = model.InitialAmount;
 
-                    _dbContext.Account.Update(entities);
-                    return await _dbContext.SaveChangesAsync();
+                        _dbContext.Account.Update(entities);
+                        return await _dbContext.SaveChangesAsync();
+                    }
+                    return 0;
                 }
                 return 0;
             }
