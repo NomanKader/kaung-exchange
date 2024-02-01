@@ -17,7 +17,7 @@ namespace KaungExchange_Api.Services
         {
             try
             {
-                if (CheckWalletAccountExist(model.AccountNo, model.WalletType))
+                if (CheckWalletAccountExist(model.Staff, model.AccountNo, model.WalletType))
                 {
                     AccountEntities entities = new AccountEntities();
                     #region DataMapping
@@ -40,16 +40,17 @@ namespace KaungExchange_Api.Services
             }
         }
 
-        public bool CheckWalletAccountExist(string accountNo, string walletType)
+        public bool CheckWalletAccountExist(int staffId, string accountNo, string walletType)
         {
             try
             {
-                var dataResult = _dbContext.Account.Where(x => x.AccountNo == accountNo && x.WalletType == walletType).FirstOrDefault();
+                var dataResult = _dbContext.Account.Where(x => x.AccountNo == accountNo
+                && x.WalletType == walletType && x.Staff == staffId).FirstOrDefault();
                 if (dataResult != null)
                 {
-                    return true;
+                    return false;
                 }
-                return false;
+                return true;
             }
             catch (Exception ex)
             {
@@ -96,7 +97,7 @@ namespace KaungExchange_Api.Services
             try
             {
                 AccountEntities entities = new AccountEntities();
-                if (CheckWalletAccountExist(model.AccountNo, model.WalletType))
+                if (CheckWalletAccountExist(model.Staff, model.AccountNo, model.WalletType))
                 {
                     entities = await _dbContext.Account.AsNoTracking().Where(x => x.Id == model.Id).FirstOrDefaultAsync();
                     if (entities != null)
