@@ -1,23 +1,24 @@
 ﻿using KaungExchange_Api.Models;
 using KaungExchange_Api.Services;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace KaungExchange_Api.Controllers
 {
     public class SaleController : Controller
     {
-        private SaleServices _Saleservices;
+        private SaleServices _saleServices;
 
         public SaleController(SaleServices saleservices)
         {
-            _Saleservices = saleservices;
+            _saleServices = saleservices;
         }
 
-        [Route("api/addsale")]
+        [Route("api/sale")]
         [HttpPost]
         public async Task<IActionResult> AddSale([FromBody] SalesModel model)
         {
-            var dataResult = await _Saleservices.AddSale(model);
+            var dataResult = await _saleServices.AddSale(model);
             if (dataResult > 0)
             {
                 return StatusCode(StatusCodes.Status200OK);
@@ -34,6 +35,14 @@ namespace KaungExchange_Api.Controllers
             {
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
+        }
+
+        [Route("api/sale")]
+        [HttpGet]
+        public async Task<IActionResult> SaleHistory()
+        {
+            var dataResult = await _saleServices.SaleHistory();
+            return Content(JsonConvert.SerializeObject(dataResult), "application/json");
         }
     }
 }

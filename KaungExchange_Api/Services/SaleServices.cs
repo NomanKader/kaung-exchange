@@ -1,5 +1,6 @@
 ﻿using KaungExchange_Api.Models;
 using KaungExchange_Api.Models.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace KaungExchange_Api.Services
 {
@@ -42,6 +43,32 @@ namespace KaungExchange_Api.Services
                 #endregion
                 await _dbContext.Sales.AddAsync(entities);
                 return await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<List<SaleHistoryResponseModel>> SaleHistory()
+        {
+            try
+            {
+                return (from s in _dbContext.Sales
+                        join u in _dbContext.User on s.Staff equals u.Id
+                        select new SaleHistoryResponseModel()
+                        {
+                            Id = s.Id,
+                            AccountNo = s.AccountNo,
+                            WalletType = s.WalletType,
+                            ReceivedType = s.ReceivedType,
+                            SaleType = s.SaleType,
+                            StaffName = u.UserName,
+                            Amount = s.Amount,
+                            SaleCreatedDate = s.CreatedDate.ToString("yyyy-MM-dd hh:mm tt"),
+                            Status = s.Status,
+                            PaymentCompleteDate = s.UpdatedDate.ToString("yyyy-MM-dd hh:mm tt"),
+                        }).ToList();
             }
             catch (Exception ex)
             {
