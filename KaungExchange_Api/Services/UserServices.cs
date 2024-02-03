@@ -96,6 +96,24 @@ namespace KaungExchange_Api.Services
             }
         }
 
+        public async Task<List<WalletListModel>> GetWalletByStaffId(int staffId)
+        {
+            try
+            {
+                return await _dbContext.Account.Where(x => x.Staff == staffId)
+                    .Select(x => new WalletListModel()
+                    {
+                        Id = x.Id,
+                        Staff = x.Staff,
+                        WalletType = x.WalletType,
+                    }).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public async Task<int> UpdateUser(UserModel model)
         {
             try

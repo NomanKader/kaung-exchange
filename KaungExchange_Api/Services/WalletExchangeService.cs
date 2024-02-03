@@ -18,7 +18,7 @@ namespace KaungExchange_Api.Services
             try
             {
                 decimal currentAmount = CheckCurrentAmount(model.FromWallet, model.FromAccount);
-                if (model.ExchangeAmount <= currentAmount)
+                if (currentAmount >= model.ExchangeAmount)
                 {
                     var updateAmount = await UpdateAmount(model.FromAccount, model.ToAccount, model.ExchangeAmount);
                     if (updateAmount > 0)
@@ -39,6 +39,28 @@ namespace KaungExchange_Api.Services
                     return 0;
                 }
                 return -1;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<List<WalletExchangeModel>> WalletExchangeHistoryList()
+        {
+            try
+            {
+                return await _dbContext.WalletExchange.Select(x => new WalletExchangeModel()
+                {
+                    Id = x.Id,
+                    FromWallet = x.FromWallet,
+                    ToWallet = x.ToWallet,
+                    FromAccount = x.FromAccount,
+                    ToAccount = x.ToAccount,
+                    ExchangeAmount = x.ExchangeAmount,
+                    Note = x.Note,
+                    ExchangeDate = x.ExchangeDate.ToString("yyyy-MM-dd hh:mm tt")
+                }).ToListAsync();
             }
             catch (Exception ex)
             {

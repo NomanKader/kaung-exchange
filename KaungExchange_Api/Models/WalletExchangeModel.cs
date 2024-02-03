@@ -9,6 +9,6 @@
         public string ToAccount { get; set; }
         public decimal ExchangeAmount { get; set; }
         public string Note { get; set; }
-        public DateTime ExchangeDate { get; set; }
+        public string ExchangeDate { get; set; }
     }
 }

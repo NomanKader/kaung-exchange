@@ -1,6 +1,7 @@
 ﻿using KaungExchange_Api.Models;
 using KaungExchange_Api.Services;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace KaungExchange_Api.Controllers
 {
@@ -30,6 +31,14 @@ namespace KaungExchange_Api.Controllers
             {
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
+        }
+
+        [Route("api/exchangewallet")]
+        [HttpGet]
+        public async Task<IActionResult> WalletExchangeHistoryList()
+        {
+            var dataResult = await _service.WalletExchangeHistoryList();
+            return Content(JsonConvert.SerializeObject(dataResult), "application/json");
         }
     }
 }

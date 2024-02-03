@@ -39,6 +39,14 @@ namespace KaungExchange_Api.Controllers
             return Content(JsonConvert.SerializeObject(dataResult), "application/json");
         }
 
+        [Route("api/walletlistbystaffid")]
+        [HttpGet]
+        public async Task<IActionResult> WallListByStaffId(int staffID)
+        {
+            var dataResult = await _userServices.GetWalletByStaffId(staffID);
+            return Content(JsonConvert.SerializeObject(dataResult), "application/json");
+        }
+
         [Route("api/user")]
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] UserModel model)

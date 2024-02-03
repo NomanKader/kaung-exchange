@@ -10,5 +10,6 @@ namespace KaungExchange_Api.Services
         public DbSet<AccountEntities> Account { get; set; }
         public DbSet<TransferRateEntities> TransferRate { get; set; }
         public DbSet<WalletExchangeEntities> WalletExchange { get; set; }
+        public DbSet<SalesEntities> Sales { get; set; }
     }
 }
