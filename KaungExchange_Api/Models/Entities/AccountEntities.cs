@@ -11,8 +11,6 @@ namespace KaungExchange_Api.Models.Entities
         public int Staff { get; set; }
         public string AccountNo { get; set; }
         public string WalletType { get; set; }
-        public string ReceivedType { get; set; }
-        public string SaleType { get; set; }
         public string AccountUserName { get; set; }
         public decimal InitialAmount { get; set; }
         public DateTime CreatedDate { get; set; }

@@ -105,6 +105,7 @@ namespace KaungExchange_Api.Services
                     {
                         Id = x.Id,
                         Staff = x.Staff,
+                        AccountNo = x.AccountNo,
                         WalletType = x.WalletType,
                     }).ToListAsync();
             }

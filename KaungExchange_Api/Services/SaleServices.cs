@@ -16,9 +16,24 @@ namespace KaungExchange_Api.Services
         {
             try
             {
+                if (model.SaleType == "Credit")
+                {
+                    var calculateSaleAmount = UpdateAmount(model.Amount, model.AccountNo, model.WalletType, model.ReceivedType,
+                    model.SaleType);
+                    if (calculateSaleAmount == -2)
+                    {
+                        return -2; // account does not exist
+                    }
+                    if (calculateSaleAmount == -1)
+                    {
+                        return -1; // insufficient balance
+                    }
+                }
                 #region DataMapping
                 SalesEntities entities = new SalesEntities();
+                entities.AccountNo = model.AccountNo;
                 entities.WalletType = model.WalletType;
+                entities.ReceivedType = model.ReceivedType;
                 entities.SaleType = model.SaleType;
                 entities.Staff = model.Staff;
                 entities.Amount = model.Amount;
@@ -44,7 +59,10 @@ namespace KaungExchange_Api.Services
 
                 account = _dbContext.Account.Where(x => x.AccountNo == accountNo && x.WalletType == walletType)
                     .FirstOrDefault();
-
+                if (account == null)
+                {
+                    return -2;
+                }
                 if (receivedType == "CashIn")
                 {
                     if (account.InitialAmount >= saleAmount)
@@ -58,7 +76,7 @@ namespace KaungExchange_Api.Services
                         account.InitialAmount = finalAmount;
                         account.CreatedDate = account.CreatedDate;
 
-                        _dbContext.Account.Add(account);
+                        _dbContext.Account.Update(account);
                         return _dbContext.SaveChanges();
                     }
                     else
@@ -77,7 +95,7 @@ namespace KaungExchange_Api.Services
                     account.InitialAmount = finalAmount;
                     account.CreatedDate = account.CreatedDate;
 
-                    _dbContext.Account.Add(account);
+                    _dbContext.Account.Update(account);
                     return _dbContext.SaveChanges();
                 }
             }
