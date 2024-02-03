@@ -9,7 +9,7 @@ const LoginAPI=async(postBody,history)=>{
             var cipherUserRole=EncryptDataComponent(userRole);
             sessionStorage.setItem('userRole',cipherUserRole);
             console.log("Data",cipherUserRole);
-            const routePath=userRole==='Admin'?'/admin/user':'/admin/staff';          
+            const routePath=userRole==='Admin'?'/admin/user':'/staff/sale';          
             history.push(routePath)
         }
     }).catch((err)=>{

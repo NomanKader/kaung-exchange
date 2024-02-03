@@ -16,7 +16,9 @@ import { ToastContainer, toast } from "react-toastify";
 import BackDropComponent from "../Loading/BackDropComponent";
 import LogoIcon from '../../assets/logo.png';
 import moment from "moment";
+import GetWalletAPI from '../../api/wallet/GetWalletController';
 const SaleFormComponent = () => {
+  const [walletList,setWalletList]=useState([]);
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState("");
   const [sales, setSales] = useState([]);
@@ -28,65 +30,23 @@ const SaleFormComponent = () => {
   const [invoiceTotalAmount,setInvoiceTotalAmount]=useState(0);
   //   const [totalPrice,setTotalPrice]=useState('');
 
-  useEffect(() => {
-    // Fetch products from the server
-    axios
-      .get("http://localhost:5000/api/product")
-      .then((response) => {
-        setProducts(response.data.products);
-      })
-      .catch((error) => {
-        console.error("Error fetching products:", error);
-      });
+  useEffect(()=>{
+    console.log("Getting Wallet List...");
+    GetWalletAPI(setWalletList,setShowBackDrop,toast)
+  },[])
+  useEffect(()=>{
+    if(walletList.length>0){
+        walletList.map(({StaffName,WalletType})=>{
+          if(StaffName=='staff'){
+            setWalletList([]);
+           setWalletList([{label:WalletType}])
+          }
+        })
+    }
+  },[walletList]);
+  const handleGetSale=()=>{
 
-    // Fetch categories from the server
-    axios
-      .get("http://localhost:5000/api/category")
-      .then((response) => {
-        setCategories(response.data.categories);
-      })
-      .catch((error) => {
-        console.error("Error fetching categories:", error);
-      });
-
-    // Fetch sales from the server
-    axios
-      .get("http://localhost:5000/api/sale")
-      .then((response) => {
-        setSales(response.data.sales);
-      })
-      .catch((error) => {
-        console.error("Error fetching sales:", error);
-      });
-  }, []); // Empty dependency array ensures the effect runs only once
-  const handleGetSale = async (sid) => {
-    await axios
-      .get("http://localhost:5000/api/sale")
-      .then((response) => {
-        setSales(response.data.sales);
-        console.log("SID", sid);
-        sid != "" &&
-          response.data.sales.map(({ sale_id, total_price }) => {
-            if (sid == sale_id) {
-                console.log("SAle id",sale_id)
-              setInvoiceDetails([
-                ...invoiceDetails,
-                {
-                  sale_id: sid,
-                  product_name: product?.Product_Name || "",
-                  category_name: product?.Category_Name || "",
-                  quantity: quantity,
-                  total_price: total_price,
-                },
-              ]);              
-              toast.success("Sale Added Successfully");
-            }
-          });
-      })
-      .catch((error) => {
-        console.error("Error fetching sales:", error);
-      });
-  };
+  }
   const handleAddSale = async () => {
     const currentDate = moment().format('YYYY-MM-DD');
     // Check if both product and quantity are selected
@@ -205,7 +165,7 @@ const SaleFormComponent = () => {
       <Typography variant="h6">Add New Sale</Typography>
       <Autocomplete
         id="product-autocomplete"
-        options={products}
+        options={walletList}
         getOptionLabel={(option) => option.Product_Name}
         sx={{ width: { lg: "30%", xs: "80%" }, mt: 1 }}
         value={product}

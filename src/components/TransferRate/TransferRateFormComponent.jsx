@@ -12,10 +12,6 @@ import {
 import MUIDataTable from "mui-datatables";
 import { ToastContainer, toast } from "react-toastify";
 import BackDropComponent from "../Loading/BackDropComponent";
-import CreateUserAPI from "../../api/user/CreateUserController";
-import GetUserAPI from "../../api/user/GerUserController";
-import DeleteUserAPI from "../../api/user/DeleteUserController";
-import UpdateUserAPI from "../../api/user/UpdateUserController";
 import GetTransferRateAPI from "../../api/transferrate/GetTransferRateController";
 import CreateTransferRateAPI from "../../api/transferrate/CreateTransferRateController";
 import UpdateTransferRateAPI from "../../api/transferrate/UpdateTransferRateController";
@@ -23,9 +19,7 @@ const TransferRateFormComponent = () => {
   const [cashInPercentage, setCashInPercentage] = useState("");
   const [cashOutPercentage, setCashOutPercentage] = useState(""); // New state for cashOutPercentage
   const [mobileMoney, setMoblileMoney] = useState(""); // New state for user role
-  const [selectedShop, setSelectedShop] = useState(""); // New state for user role
   const [mobileMoneyList, setMobileMoneyList] = useState(["Wave Money", "Kpay","CB Pay","Mytel Pay","True Money"]); // Options for Autocomplete
-  const [shops, setShops] = useState(["Kaung1", "Kaung2"]); // Options for Autocomplete
   const [transferList, setTransferList] = useState([]);
   const [showBackDrop, setShowBackDrop] = useState(false);
   // Edit Modal State
@@ -33,7 +27,6 @@ const TransferRateFormComponent = () => {
   const [editCashInPercentage, setEditCashInPercentage] = useState("");
   const [editCashOutPercentage, setEditCashOutPercentage] = useState("");
   const [editMobileMoney, setEditMobileMoney] = useState("");
-  const [editShopName, setEditShopName] = useState("");
   const [editModalOpen, setEditModalOpen] = useState(false);
   useEffect(() => {
     // Fetch transferList from the server

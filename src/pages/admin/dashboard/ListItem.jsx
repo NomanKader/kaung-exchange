@@ -12,6 +12,7 @@ import {
   Money,
   MonetizationOn,
   TransferWithinAStation,
+  CurrencyExchange,
 } from "@mui/icons-material";
 import DecryptDataComponent from "../../../data/aes/DecryptData";
 import theme from "../../../theme";
@@ -28,6 +29,12 @@ export const mainListItems = (history) => {
               <MonetizationOn iconColor={theme.palette.primary.main}/>
             </ListItemIcon>
             <ListItemText primary="Wallet" />
+          </ListItemButton>
+          <ListItemButton onClick={() => history.push("/admin/exchangewallet")}>
+            <ListItemIcon>
+              <CurrencyExchange/>
+            </ListItemIcon>
+            <ListItemText primary="Currency Exchange" />
           </ListItemButton>
           <ListItemButton onClick={() => history.push("/admin/transferrate")}>
             <ListItemIcon>

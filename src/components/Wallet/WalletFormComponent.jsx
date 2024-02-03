@@ -183,21 +183,21 @@ const MobileMoneyFormComponent = () => {
         ),
       },
     },
-    {
-      name: "delete",
-      label: "Delete",
-      options: {
-        customBodyRender: (value, tableMeta, updateValue) => (
-          <Button
-            variant="outlined"
-            color="secondary"
-            onClick={() => handleDelete(tableMeta.rowData[0])}
-          >
-            Delete
-          </Button>
-        ),
-      },
-    },
+    // {
+    //   name: "delete",
+    //   label: "Delete",
+    //   options: {
+    //     customBodyRender: (value, tableMeta, updateValue) => (
+    //       <Button
+    //         variant="outlined"
+    //         color="secondary"
+    //         onClick={() => handleDelete(tableMeta.rowData[0])}
+    //       >
+    //         Delete
+    //       </Button>
+    //     ),
+    //   },
+    // },
   ];
 
   const options = {
