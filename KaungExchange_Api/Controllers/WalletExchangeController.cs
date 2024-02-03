@@ -35,9 +35,9 @@ namespace KaungExchange_Api.Controllers
 
         [Route("api/exchangewallet")]
         [HttpGet]
-        public async Task<IActionResult> WalletExchangeHistoryList()
+        public async Task<IActionResult> WalletExchangeHistoryList(DateTime? fromDate, DateTime? toDate)
         {
-            var dataResult = await _service.WalletExchangeHistoryList();
+            var dataResult = await _service.WalletExchangeHistoryList(fromDate, toDate);
             return Content(JsonConvert.SerializeObject(dataResult), "application/json");
         }
     }

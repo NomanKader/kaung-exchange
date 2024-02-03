@@ -68,7 +68,7 @@ namespace KaungExchange_Api.Services
                             SaleCreatedDate = s.CreatedDate.ToString("yyyy-MM-dd hh:mm tt"),
                             Status = s.Status,
                             PaymentCompleteDate = s.UpdatedDate.ToString("yyyy-MM-dd hh:mm tt"),
-                        }).ToList();
+                        }).OrderByDescending(x=>x.Id).ToList();
             }
             catch (Exception ex)
             {

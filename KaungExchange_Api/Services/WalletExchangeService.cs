@@ -46,21 +46,41 @@ namespace KaungExchange_Api.Services
             }
         }
 
-        public async Task<List<WalletExchangeModel>> WalletExchangeHistoryList()
+        public async Task<List<WalletExchangeModel>> WalletExchangeHistoryList(DateTime? fromDate, DateTime? toDate)
         {
             try
             {
-                return await _dbContext.WalletExchange.Select(x => new WalletExchangeModel()
+                if (!string.IsNullOrEmpty(fromDate.ToString())
+                    && !string.IsNullOrEmpty(toDate.ToString()))
                 {
-                    Id = x.Id,
-                    FromWallet = x.FromWallet,
-                    ToWallet = x.ToWallet,
-                    FromAccount = x.FromAccount,
-                    ToAccount = x.ToAccount,
-                    ExchangeAmount = x.ExchangeAmount,
-                    Note = x.Note,
-                    ExchangeDate = x.ExchangeDate.ToString("yyyy-MM-dd hh:mm tt")
-                }).ToListAsync();
+                    return await _dbContext.WalletExchange
+                        .Where(x => x.ExchangeDate >= fromDate && x.ExchangeDate <= toDate)
+                        .Select(x => new WalletExchangeModel()
+                        {
+                            Id = x.Id,
+                            FromWallet = x.FromWallet,
+                            ToWallet = x.ToWallet,
+                            FromAccount = x.FromAccount,
+                            ToAccount = x.ToAccount,
+                            ExchangeAmount = x.ExchangeAmount,
+                            Note = x.Note,
+                            ExchangeDate = x.ExchangeDate.ToString("yyyy-MM-dd hh:mm tt")
+                        }).OrderByDescending(x => x.Id).ToListAsync();
+                }
+                else
+                {
+                    return await _dbContext.WalletExchange.Select(x => new WalletExchangeModel()
+                    {
+                        Id = x.Id,
+                        FromWallet = x.FromWallet,
+                        ToWallet = x.ToWallet,
+                        FromAccount = x.FromAccount,
+                        ToAccount = x.ToAccount,
+                        ExchangeAmount = x.ExchangeAmount,
+                        Note = x.Note,
+                        ExchangeDate = x.ExchangeDate.ToString("yyyy-MM-dd hh:mm tt")
+                    }).OrderByDescending(x => x.Id).ToListAsync();
+                }
             }
             catch (Exception ex)
             {
