@@ -2,7 +2,10 @@ import axios from 'axios';
 import userData from '../../data/user_data';
 import EncryptDataComponent from '../../data/aes/EncryptData';
 const LoginAPI=async(postBody,history)=>{
-    await axios.post(process.env.REACT_APP_API_ENDPOINT+'user/login',postBody)
+    const headers={
+        'Authorization': 'Basic MTExNjY1NjM6NjAtZGF5ZnJlZXRyaWFs',
+    }
+    await axios.post(process.env.REACT_APP_API_ENDPOINT+'user/login',postBody,{headers:headers})
     .then((res)=>{
         if(res.status===200){            
             const userRole=res.data.UserRole;            
