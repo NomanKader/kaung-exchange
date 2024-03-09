@@ -1,8 +1,11 @@
 import axios from "axios";
 import GetWalletAPI from "./GetWalletController";
 const CreateWalletAPI = async (postBody,setWalletList,setShowBackDrop,toast) => {
+    const headers={
+        'Authorization':process.env.AUTHORIZATION,
+    }
     setShowBackDrop(true);
-    await axios.post(process.env.REACT_APP_API_ENDPOINT + "wallet",postBody)
+    await axios.post(process.env.REACT_APP_API_ENDPOINT + "wallet",postBody,{headers:headers})
     .then(res => {
         if(res.status){
             GetWalletAPI(setWalletList,setShowBackDrop,toast)

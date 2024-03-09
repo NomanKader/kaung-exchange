@@ -15,7 +15,7 @@ import { ToastContainer, toast } from "react-toastify";
 import moment from "moment";
 import "react-toastify/dist/ReactToastify.css";
 import BackDropComponent from "../Loading/BackDropComponent";
-import GetUserAPI from "../../api/user/GerUserController";
+import GetUserAPI from "../../api/user/GetUserController";
 import GetWalletAPI from "../../api/wallet/GetWalletController";
 import DeleteWalletAPI from "../../api/wallet/DeleteWalletController";
 import CreateWalletAPI from "../../api/wallet/CreateWalletController";

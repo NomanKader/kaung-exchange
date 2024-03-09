@@ -1,7 +1,10 @@
 import axios from "axios";
 const GetWalletAPI=async(setWalletList,setShowBackDrop,toast)=>{
+    const headers={
+        'Authorization':process.env.AUTHORIZATION,
+    }
     setShowBackDrop(true);
-    await axios.get(process.env.REACT_APP_API_ENDPOINT+'wallet')
+    await axios.get(process.env.REACT_APP_API_ENDPOINT+'wallet',{headers:headers})
     .then((res)=>{
         setWalletList(res.data);
         setShowBackDrop(false);        

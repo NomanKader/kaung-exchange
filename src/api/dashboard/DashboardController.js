@@ -1,6 +1,9 @@
 import axios  from "axios";
 const GetDashboardDataAPI=async(setDashboardData)=>{
-    await axios.get(process.env.REACT_APP_API_ENDPOINT+'dashboard').then((res)=>{
+    const headers={
+        'Authorization':process.env.AUTHORIZATION,
+    }
+    await axios.get(process.env.REACT_APP_API_ENDPOINT+'dashboard',{headers:headers}).then((res)=>{
         console.log("Dashboard Data",res.data);
         setDashboardData(res.data);
     }).catch((err)=>{

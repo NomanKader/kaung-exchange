@@ -2,8 +2,11 @@ import axios from "axios";
 import GetTransferRateAPI from "./GetTransferRateController";
 const CreateTransferRateAPI = async (postBody,setTransferList,setShowBackDrop,setMobileMoney,setCashInPercentage,setCashOutPercentage,toast) => {
     console.log("Transfer Rate Post Body",postBody)
+    const headers={
+      'Authorization':process.env.AUTHORIZATION,
+  }
   await axios
-    .post(process.env.REACT_APP_API_ENDPOINT+'transferrate',postBody)
+    .post(process.env.REACT_APP_API_ENDPOINT+'transferrate',postBody,{headers:headers})
     .then(() => {
       // Update the users list after successful addition
       GetTransferRateAPI(setTransferList,setShowBackDrop);

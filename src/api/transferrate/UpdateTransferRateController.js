@@ -1,8 +1,11 @@
 import axios from "axios";
 import GetTransferRateAPI from "./GetTransferRateController";
 const UpdateTransferRateAPI=async(postBody,setTransferRateList,setShowBackDrop,toast)=>{
+  const headers={
+    'Authorization':process.env.AUTHORIZATION,
+}
   setShowBackDrop(true);
-  console.log("Transfer Rate Update Post Body",postBody)
+  console.log("Transfer Rate Update Post Body",postBody,{headers:headers})
     axios
       .put(process.env.REACT_APP_API_ENDPOINT+'transferrate',postBody)
       .then((response) => {

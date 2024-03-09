@@ -1,7 +1,10 @@
 import axios  from "axios";
 const GetTransferRateAPI=async(setTransferList,setShowBackDrop)=>{
+  const headers={
+    'Authorization':process.env.AUTHORIZATION,
+}
    await axios
-    .get(process.env.REACT_APP_API_ENDPOINT + "transferrate")
+    .get(process.env.REACT_APP_API_ENDPOINT + "transferrate",{headers:headers})
     .then((response) => {
       console.log("Transfer Rates",response.data);
       setTransferList(response.data);

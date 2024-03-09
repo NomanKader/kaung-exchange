@@ -1,8 +1,11 @@
 import axios from "axios";
 import GetWalletAPI from "./GetWalletController";
 const UpdateWalletAPI=async(postBody,setWalletList,setShowBackDrop,toast)=>{
+    const headers={
+        'Authorization':process.env.AUTHORIZATION,
+    }
     setShowBackDrop(true);
-    await axios.put(process.env.REACT_APP_API_ENDPOINT+"wallet",postBody)
+    await axios.put(process.env.REACT_APP_API_ENDPOINT+"wallet",postBody,{headers:headers})
     .then((res)=>{
         if(res.status===200){   
             toast.success("Wallet Updated");

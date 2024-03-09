@@ -1,6 +1,9 @@
 import GetWalletAPI from "./GetWalletController";
 
 const DeleteWalletAPI = async (postBody, setWalletList, setShowBackDrop, toast) => {
+  const headers={
+    'Authorization':process.env.AUTHORIZATION,
+}
   setShowBackDrop(true);
   console.log("PostBody", postBody);
 
@@ -13,7 +16,7 @@ const DeleteWalletAPI = async (postBody, setWalletList, setShowBackDrop, toast) 
   };
 
   try {
-    const response = await fetch(process.env.REACT_APP_API_ENDPOINT + 'wallet', requestOptions);
+    const response = await fetch(process.env.REACT_APP_API_ENDPOINT + 'wallet', requestOptions,{headers:headers});
     if (response.ok) {
       GetWalletAPI(setWalletList,setShowBackDrop,toast);
       setShowBackDrop(false);

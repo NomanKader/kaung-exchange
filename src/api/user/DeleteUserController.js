@@ -1,6 +1,9 @@
-import GetUserAPI from "./GerUserController";
+import GetUserAPI from "./GetUserController";
 
 const DeleteUserAPI = async (postBody, setUsers, users, setShowBackDrop, toast) => {
+  const headers={
+    'Authorization':process.env.AUTHORIZATION,
+}
   setShowBackDrop(true);
   const requestOptions = {
     method: 'DELETE',
@@ -11,7 +14,7 @@ const DeleteUserAPI = async (postBody, setUsers, users, setShowBackDrop, toast) 
   };
 
   try {
-    const response = await fetch(process.env.REACT_APP_API_ENDPOINT + 'user', requestOptions);
+    const response = await fetch(process.env.REACT_APP_API_ENDPOINT + 'user', requestOptions,{headers:headers});
 
     if (response.ok) {
       console.log("User deleted successfully");

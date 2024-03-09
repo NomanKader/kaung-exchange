@@ -3,7 +3,10 @@ import GetExchangeWalletAPI from "./GetExchangeWalletController";
 
 const CreateExchangeWalletAPI=async(postBody,setShowBackDrop,toast,setExchangeWalletList)=>{
     setShowBackDrop(true);
-    await axios.post(process.env.REACT_APP_API_ENDPOINT+'exchangewallet',postBody)
+    const headers={
+        'Authorization':process.env.AUTHORIZATION,
+    }
+    await axios.post(process.env.REACT_APP_API_ENDPOINT+'exchangewallet',postBody,{headers:headers})
     .then(()=>{
         toast.success("Exchanged Successfully");
         GetExchangeWalletAPI(setExchangeWalletList,setShowBackDrop,toast);

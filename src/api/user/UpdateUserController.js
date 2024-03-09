@@ -1,9 +1,12 @@
 import axios from "axios";
-import GetUserAPI from "./GerUserController";
+import GetUserAPI from "./GetUserController";
 const UpdateUserAPI=async(postBody,setUsers,setShowBackDrop,toast)=>{
+  const headers={
+    'Authorization':process.env.AUTHORIZATION,
+}
   setShowBackDrop(true);
     axios
-      .put(process.env.REACT_APP_API_ENDPOINT+'user',postBody)
+      .put(process.env.REACT_APP_API_ENDPOINT+'user',postBody,{headers:headers})
       .then((response) => {
         console.log("User updated successfully:", response.data);
 

@@ -14,7 +14,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import BackDropComponent from "../Loading/BackDropComponent";
 import CreateUserAPI from "../../api/user/CreateUserController";
-import GetUserAPI from "../../api/user/GerUserController";
+import GetUserAPI from "../../api/user/GetUserController";
 import DeleteUserAPI from "../../api/user/DeleteUserController";
 import UpdateUserAPI from "../../api/user/UpdateUserController";
 const UserFormComponent = () => {
