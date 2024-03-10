@@ -38,7 +38,7 @@ namespace KaungExchange_Api.Services
                 entities.SaleType = model.SaleType;
                 entities.Staff = model.Staff;
                 entities.Amount = model.Amount;
-                entities.CreatedDate = DateTime.Now;
+                entities.CreatedDate = DateTime.Now.Date;
                 entities.Status = model.SaleType == "Credit" ? "Done" : "PaymentRequired";
                 #endregion
                 await _dbContext.Sales.AddAsync(entities);

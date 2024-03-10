@@ -31,7 +31,7 @@ namespace KaungExchange_Api.Services
                         entities.ToAccount = model.ToAccount;
                         entities.ExchangeAmount = model.ExchangeAmount;
                         entities.Note = model.Note;
-                        entities.ExchangeDate = DateTime.Now;
+                        entities.ExchangeDate = DateTime.Now.Date;
                         #endregion
                         await _dbContext.WalletExchange.AddAsync(entities);
                         return await _dbContext.SaveChangesAsync();
@@ -64,7 +64,7 @@ namespace KaungExchange_Api.Services
                             ToAccount = x.ToAccount,
                             ExchangeAmount = x.ExchangeAmount,
                             Note = x.Note,
-                            ExchangeDate = x.ExchangeDate.ToString("yyyy-MM-dd hh:mm tt")
+                            ExchangeDate = x.ExchangeDate.ToString("yyyy-MM-dd")
                         }).OrderByDescending(x => x.Id).ToListAsync();
                 }
                 else
@@ -78,7 +78,7 @@ namespace KaungExchange_Api.Services
                         ToAccount = x.ToAccount,
                         ExchangeAmount = x.ExchangeAmount,
                         Note = x.Note,
-                        ExchangeDate = x.ExchangeDate.ToString("yyyy-MM-dd hh:mm tt")
+                        ExchangeDate = x.ExchangeDate.ToString("yyyy-MM-dd")
                     }).OrderByDescending(x => x.Id).ToListAsync();
                 }
             }
