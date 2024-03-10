@@ -30,7 +30,7 @@ const ExchangeWalletComponent = () => {
   const [mobileMoney, setMoblileMoney] = useState(""); // New state for user role
   const [selectedShop, setSelectedShop] = useState(""); // New state for user role
   const [mobileMoneyList, setMobileMoneyList] = useState([
-    "Wave Money",
+    "Wave",
     "Kpay",
     "CB Pay",
     "Mytel Pay",
@@ -97,12 +97,12 @@ const ExchangeWalletComponent = () => {
       toast.warn("Please fill all fields");
     } else {
       const postBody={        
-        "fromWallet": selectedFromWallet,
-        "toWallet": selectedToWallet,
-        "fromAccount": fromWalletAccountNumber,
-        "toAccount": toWalletAccountNumber,
-        "exchangeAmount": exchangeAmount,  
-        "note": exchangeNotes        
+        "FromWallet": selectedFromWallet,
+        "ToWallet": selectedToWallet,
+        "FromAccount": fromWalletAccountNumber,
+        "ToAccount": toWalletAccountNumber,
+        "ExchangeAmount": exchangeAmount,  
+        "Note": exchangeNotes        
       }
       CreateExchangeWalletAPI(postBody,setShowBackDrop,toast,setExchangeWalletList);
       setOpenCreateDialog(false);
