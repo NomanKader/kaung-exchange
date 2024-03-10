@@ -15,6 +15,9 @@ const CreateExchangeWalletAPI=async(postBody,setShowBackDrop,toast,setExchangeWa
         if(err.response.status==402){
             toast.warn("Insufficient Amount");
         }
+        else if(err.response.status==406){
+            toast.warn(err.response.data);
+        }
         // toast.error("Error");
         // console.error("Error",err);
     })
