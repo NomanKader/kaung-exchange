@@ -58,18 +58,15 @@ namespace KaungExchange_Api.Services
             {
 
                 TransferRateEntities entities = new TransferRateEntities();
-                if (CheckWalletType(model.Wallet))
+                entities = await _dbContext.TransferRate.AsNoTracking().Where(x => x.Id == model.Id).FirstOrDefaultAsync();
+                if (entities != null)
                 {
-                    entities = await _dbContext.TransferRate.AsNoTracking().Where(x => x.Id == model.Id).FirstOrDefaultAsync();
-                    if (entities != null)
-                    {
-                        #region DataMapping
-                        entities.Wallet = model.Wallet;
-                        entities.CashIn_Percentage = model.CashIn_Percentage;
-                        entities.CashOut_Percentage = model.CashOut_Percentage;
-                        #endregion
-                        _dbContext.TransferRate.Update(entities);
-                    }
+                    #region DataMapping
+                    entities.Wallet = model.Wallet;
+                    entities.CashIn_Percentage = model.CashIn_Percentage;
+                    entities.CashOut_Percentage = model.CashOut_Percentage;
+                    #endregion
+                    _dbContext.TransferRate.Update(entities);
                     return await _dbContext.SaveChangesAsync();
                 }
                 return 0;
