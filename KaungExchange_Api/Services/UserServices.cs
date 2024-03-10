@@ -87,7 +87,7 @@ namespace KaungExchange_Api.Services
                     UserRole = x.UserRole,
                     Password = x.Password,
                     BusinessName = x.BusinessName
-                }).ToListAsync();
+                }).OrderByDescending(u => u.Id).ToListAsync();
                 return dataResult;
             }
             catch (Exception ex)
