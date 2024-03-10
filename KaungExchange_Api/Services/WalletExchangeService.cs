@@ -17,6 +17,18 @@ namespace KaungExchange_Api.Services
         {
             try
             {
+                bool isFromAccountExist = CheckAccountExist(model.FromAccount, model.FromWallet);
+                bool isToAccountExist = CheckAccountExist(model.ToAccount, model.ToWallet);
+
+                if (!isFromAccountExist)
+                {
+                    return -2;
+                }
+                if (!isToAccountExist)
+                {
+                    return -3;
+                }
+
                 decimal currentAmount = CheckCurrentAmount(model.FromWallet, model.FromAccount);
                 if (currentAmount >= model.ExchangeAmount)
                 {
@@ -39,6 +51,23 @@ namespace KaungExchange_Api.Services
                     return 0;
                 }
                 return -1;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public bool CheckAccountExist(string accountNo, string walletType)
+        {
+            try
+            {
+                var dataResult = _dbContext.Account.Where(x => x.AccountNo == accountNo && x.WalletType == walletType).FirstOrDefault();
+                if (dataResult != null)
+                {
+                    return true;
+                }
+                return false;
             }
             catch (Exception ex)
             {

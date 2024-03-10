@@ -27,6 +27,16 @@ namespace KaungExchange_Api.Controllers
             {
                 return StatusCode(StatusCodes.Status402PaymentRequired);
             }
+            else if (dataResult == -2)
+            {
+                return StatusCode(StatusCodes.Status406NotAcceptable,
+                    $"Account does not exist with this number {model.FromAccount}");
+            }
+            else if (dataResult == -3)
+            {
+                return StatusCode(StatusCodes.Status406NotAcceptable,
+                    $"Account does not exist with this number {model.ToAccount}");
+            }
             else
             {
                 return StatusCode(StatusCodes.Status400BadRequest);
