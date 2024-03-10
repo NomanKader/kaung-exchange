@@ -170,6 +170,7 @@ const TransferRateFormComponent = () => {
         <DialogTitle>Edit Transfer Rates</DialogTitle>
         <DialogContent>
         <Autocomplete
+        disabled={true}
         id="user-role-autocomplete"
         options={mobileMoneyList}
         getOptionLabel={(option) => option}
