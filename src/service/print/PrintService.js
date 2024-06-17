@@ -1,0 +1,33 @@
+import dayjs from "dayjs";
+
+const _printVoucherService = (customers, selectedCustomer, quantity, unitPrice, totalAmount) => {
+  const todayDate = dayjs().format("YYYY-MM-DD");
+  const customerName = 'Naung Naung';
+  
+  const printContent = `
+    <div style="text-align: left;">
+      <img src="https://i.ibb.co/tbJbPM5/viber-image-2024-06-15-05-54-18-471.jpg" alt="Company Logo" style="width: 100px; height: auto;"/>
+      <h2>ဟန်စည်-ရွေလုပ်ငန်း</h2>
+      <p>နေ့စွဲ: ${todayDate}</p>
+      <p>အမည်: ${customerName}</p>
+      <p>အရေအတွက်: ${quantity}</p>
+      <p>ဈေးနူန်း: ${unitPrice}</p>
+      <p>ကျသင့်ငွေ: ${totalAmount}</p>
+    </div>
+  `;
+
+  const printWindow = window.open("", "PRINT", "height=400,width=600");
+  printWindow.document.write("<html><head><title>Voucher</title>");
+  printWindow.document.write("</head><body>");
+  printWindow.document.write(printContent);
+  printWindow.document.write("</body></html>");
+  printWindow.document.close();
+  
+  printWindow.onload = () => {
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+  };
+};
+
+export default _printVoucherService;
