@@ -1,70 +1,88 @@
-# Getting Started with Create React App
+#Powered By NK Software House 
+- [Web Application] for the HanSee Gold Business .
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Buy Page Application
 
-## Available Scripts
+This application allows users to choose a customer, select options, enter quantities, and manage purchases. It includes features for printing vouchers and handling customer data with APIs. This project is built using React and Material-UI (MUI).
 
-In the project directory, you can run:
+## Table of Contents
 
-### `npm start`
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Pages](#pages)
+  - [HomePage](#homepage)
+  - [GoldPricePage](#goldpricepage)
+  - [CustomerPage](#customerpage)
+  - [ReportPage](#reportpage)
+  - [NotFoundPage](#notfoundpage)
+  - [BuyPage](#buypage)
+- [APIs](#apis)
+- [License](#license)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Features
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Customer selection with data from API.
+- Radio buttons to choose options.
+- Quantity input field with automatic total amount calculation.
+- Buy and clear buttons for handling purchase operations.
+- Voucher printing with customer and purchase details.
+- Date pickers for filtering reports.
+- Toast notifications for user interactions.
 
-### `npm test`
+## Installation
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/your-username/your-repository.git
+    ```
+2. Navigate to the project directory:
+    ```bash
+    cd your-repository
+    ```
+3. Install dependencies:
+    ```bash
+    npm install
+    ```
 
-### `npm run build`
+## Usage
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. Start the development server:
+    ```bash
+    npm start
+    ```
+2. Open your browser and navigate to `http://localhost:3000`.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Pages
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### HomePage
 
-### `npm run eject`
+The HomePage displays options for Buy, GoldPrice, Report, and Setting. Each option redirects to its respective page.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### GoldPricePage
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The GoldPricePage allows users to update the gold price by entering the `Yway Price` and `Lone Price`. There are buttons to update and clear the inputs.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### CustomerPage
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+The CustomerPage allows users to create and manage customers. Users can enter a customer name, and use buttons to create or clear the input. Below this, an MUI DataTable displays customer data with edit and delete options.
 
-## Learn More
+### ReportPage
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+The ReportPage provides a form to filter reports by date and customer name. Users can choose dates and select a customer from an autocomplete dropdown. A table displays filtered report data.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### NotFoundPage
 
-### Code Splitting
+The NotFoundPage shows a message indicating that the page was not found, along with a relevant image.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### BuyPage
 
-### Analyzing the Bundle Size
+The BuyPage allows users to select a customer, choose options via radio buttons, and enter quantity. The unit price and total amount are displayed. Users can buy and print vouchers or clear inputs.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## APIs
 
-### Making a Progressive Web App
+Currently, the APIs for creating, editing, deleting customers, and fetching reports are not implemented. The placeholders for these API calls are set up using `axios`.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## License
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
