@@ -19,7 +19,7 @@ namespace Kaung.Controllers
         {
             var dataResult = await _service.CreateCustomer(model);
             return dataResult > 0 ? Ok("Success") : StatusCode(StatusCodes.Status409Conflict,
-                "Customer Name " + model.CustomerName + "is already exist");
+                "Customer Name " + model.CustomerName + " is already exist");
         }
 
         [HttpGet]
@@ -44,7 +44,7 @@ namespace Kaung.Controllers
         {
             var dataResult = await _service.UpdateCustomer(model);
             return dataResult > 0 ? Ok("Success") : StatusCode(StatusCodes.Status409Conflict,
-                "Sorry you cannot update.Customer Name " + model.CustomerName + "is already exist");
+                "Sorry you cannot update.Customer Name " + model.CustomerName + " is already exist");
         }
     }
 }

@@ -37,7 +37,7 @@ namespace Kaung.Services
         {
             try
             {
-                var dataResult = _dbContext.Customers.Where(x => x.CustomerName == customerName).FirstOrDefaultAsync();
+                var dataResult = _dbContext.Customers.Where(x => x.CustomerName == customerName).FirstOrDefault();
                 return dataResult != null ? false : true;
             }
             catch (Exception ex)
