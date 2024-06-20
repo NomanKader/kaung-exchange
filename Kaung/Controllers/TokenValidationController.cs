@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Kaung.Helper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -8,6 +9,8 @@ namespace Kaung.Controllers
 {
     public class TokenValidationController : Controller
     {
+        private DecryptPassword _decryptMethod = new DecryptPassword();
+
         [HttpGet]
         [Route("api/jwt")]
         public IActionResult Validate_JWT_Token([FromHeader] HttpContext context)
@@ -17,7 +20,7 @@ namespace Kaung.Controllers
                 string authHeader = context.Request.Headers["Authorization"];
                 string[] header_and_token = authHeader.Split(' ');
                 string header = header_and_token[0];
-                string token = header_and_token[1];
+                string token = _decryptMethod.Decrypt_Data(header_and_token[1]);
                 if (header != "Bearer")
                 {
                     return StatusCode(StatusCodes.Status401Unauthorized, "Invalid Token");

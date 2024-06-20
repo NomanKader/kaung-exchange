@@ -17,7 +17,7 @@ namespace Kaung.Services
                     new Claim(ClaimTypes.Name, user_name),
                     new Claim(ClaimTypes.SerialNumber, password),
                 }),
-                Expires = DateTime.UtcNow.AddHours(3),//token expires after 1 minutes
+                Expires = DateTime.UtcNow.AddMinutes(30),//token expires after 30 minutes
                 SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature)
             };
             JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();

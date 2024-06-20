@@ -26,7 +26,7 @@ namespace Kaung.Controllers
         public async Task<IActionResult> Register([FromBody] UserModel model)
         {
             LoginResponseModel responseModel = new LoginResponseModel();
-            model.Password = _encryptMethod.Encrypt_Password(model.Password);
+            model.Password = _encryptMethod.EncryptData(model.Password);
             var dataResult = await _services.Register(model);
             return dataResult > 0 ? Ok("Success") : BadRequest();
         }
@@ -36,16 +36,17 @@ namespace Kaung.Controllers
         public async Task<IActionResult> Login([FromBody] UserModel model)
         {
             LoginResponseModel responseModel = new LoginResponseModel();
-            model.Password = _encryptMethod.Encrypt_Password(model.Password);
+            model.Password = _encryptMethod.EncryptData(model.Password);
             var dataResult = await _services.Login(model);
             if (dataResult.UserID != 0)
             {
-                responseModel.Token = _tokenGenerator.Generate_Token(model.UserName, model.Password);
+                string token = _tokenGenerator.Generate_Token(model.UserName, model.Password);
+                responseModel.Token = _encryptMethod.EncryptData(token);
                 if (responseModel.Token != null)
                 {
                     responseModel.UserID = dataResult.UserID;
-                    responseModel.UserName = dataResult.UserName;
-                    responseModel.UserRole = dataResult.UserRole;
+                    responseModel.UserName = _encryptMethod.EncryptData(dataResult.UserName);
+                    responseModel.UserRole = _encryptMethod.EncryptData(dataResult.UserRole);
                     return Ok(responseModel);
                 }
             }

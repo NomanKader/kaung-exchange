@@ -5,7 +5,7 @@ namespace Kaung.Helper
 {
     public class EncryptPassword
     {
-        public string Encrypt_Password(string password)
+        public string EncryptData(string data)
         {
             //encrypt password 
             byte[] iv = new byte[16];
@@ -23,7 +23,7 @@ namespace Kaung.Helper
                     {
                         using (StreamWriter streamWriter = new StreamWriter((Stream)cryptoStream))
                         {
-                            streamWriter.Write(password);
+                            streamWriter.Write(data);
                         }
 
                         array = memoryStream.ToArray();

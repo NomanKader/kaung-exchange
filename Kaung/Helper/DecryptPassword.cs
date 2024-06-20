@@ -5,10 +5,10 @@ namespace Kaung.Helper
 {
     public class DecryptPassword
     {
-        public string Decrypt_Password(string encrypt_pwd)
+        public string Decrypt_Data(string encryptData)
         {
             byte[] iv = new byte[16];
-            byte[] buffer = Convert.FromBase64String(encrypt_pwd);
+            byte[] buffer = Convert.FromBase64String(encryptData);
 
             using (Aes aes = Aes.Create())
             {
