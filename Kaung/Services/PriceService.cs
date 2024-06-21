@@ -21,7 +21,6 @@ namespace Kaung.Services
                 priceEntitie = await _dbContext.PriceEntities.Where(x => x.PriceID == model.PriceID).FirstOrDefaultAsync();
                 if (priceEntitie != null)
                 {
-                    priceEntitie.YwayPrice = model.YwayPrice;
                     priceEntitie.LonePrice = model.LonePrice;
                     _dbContext.PriceEntities.Update(priceEntitie);
                     return await _dbContext.SaveChangesAsync();
@@ -42,7 +41,6 @@ namespace Kaung.Services
                 return await _dbContext.PriceEntities.Select(x => new PriceModel
                 {
                     PriceID = x.PriceID,
-                    YwayPrice = x.YwayPrice,
                     LonePrice = x.LonePrice
                 }).ToListAsync();
             }

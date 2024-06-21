@@ -8,7 +8,6 @@ namespace Kaung.Entities
     {
         [Key]
         public int PriceID { get; set; }
-        public int YwayPrice { get; set; }
         public int LonePrice { get; set; }
     }
 }

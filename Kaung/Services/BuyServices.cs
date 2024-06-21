@@ -19,12 +19,12 @@ namespace Kaung.Services
             {
                 BuyEntitie entitie = new BuyEntitie();
                 entitie.CustomerId = model.CustomerId;
+                entitie.CustomerName = model.CustomerName;
                 entitie.YwayQuantity = model.YwayQuantity;
                 entitie.LoneQuantity = model.LoneQuantity;
+                entitie.PaeQuantity = model.PaeQuantity;
                 entitie.SiQuantity = model.SiQuantity;
-                entitie.YwayQuantity = model.YwayQuantity;
-                entitie.LoneQuantity = model.LoneQuantity;
-                entitie.SiQuantity = model.SiQuantity;
+                entitie.LoneUnitPrice = model.LoneUnitPrice;
                 entitie.TotalAmount = model.TotalAmount;
                 entitie.KyatAmount = model.KyatAmount;
                 entitie.CreatedDate = DateTime.Now.Date;
@@ -53,10 +53,9 @@ namespace Kaung.Services
                             CustomerName = x.CustomerName,
                             YwayQuantity = x.YwayQuantity,
                             LoneQuantity = x.LoneQuantity,
+                            PaeQuantity = x.PaeQuantity,
                             SiQuantity = x.SiQuantity,
-                            YwayUnitPrice = x.YwayUnitPrice,
                             LoneUnitPrice = x.LoneUnitPrice,
-                            SiUnitPrice = x.SiUnitPrice,
                             TotalAmount = x.TotalAmount,
                             KyatAmount = x.KyatAmount,
                             CreatedDate = x.CreatedDate
@@ -73,10 +72,9 @@ namespace Kaung.Services
                             CustomerName = x.CustomerName,
                             YwayQuantity = x.YwayQuantity,
                             LoneQuantity = x.LoneQuantity,
+                            PaeQuantity = x.PaeQuantity,
                             SiQuantity = x.SiQuantity,
-                            YwayUnitPrice = x.YwayUnitPrice,
                             LoneUnitPrice = x.LoneUnitPrice,
-                            SiUnitPrice = x.SiUnitPrice,
                             TotalAmount = x.TotalAmount,
                             KyatAmount = x.KyatAmount,
                             CreatedDate = x.CreatedDate
@@ -89,10 +87,9 @@ namespace Kaung.Services
                     CustomerName = x.CustomerName,
                     YwayQuantity = x.YwayQuantity,
                     LoneQuantity = x.LoneQuantity,
+                    PaeQuantity = x.PaeQuantity,
                     SiQuantity = x.SiQuantity,
-                    YwayUnitPrice = x.YwayUnitPrice,
                     LoneUnitPrice = x.LoneUnitPrice,
-                    SiUnitPrice = x.SiUnitPrice,
                     TotalAmount = x.TotalAmount,
                     KyatAmount = x.KyatAmount,
                     CreatedDate = x.CreatedDate
