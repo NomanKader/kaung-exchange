@@ -1,9 +1,7 @@
 import dayjs from "dayjs";
 
-const _printVoucherService = (customers, selectedCustomer, quantity, unitPrice, totalAmount) => {
+const _handleVoucherService = (customerName,quantity, unitPrice, totalAmount) => {
   const todayDate = dayjs().format("YYYY-MM-DD");
-  const customerName = 'Naung Naung';
-  
   const printContent = `
     <div style="text-align: left;">
       <img src="https://i.ibb.co/tbJbPM5/viber-image-2024-06-15-05-54-18-471.jpg" alt="Company Logo" style="width: 100px; height: auto;"/>
@@ -13,6 +11,8 @@ const _printVoucherService = (customers, selectedCustomer, quantity, unitPrice, 
       <p>အရေအတွက်: ${quantity}</p>
       <p>ဈေးနူန်း: ${unitPrice}</p>
       <p>ကျသင့်ငွေ: ${totalAmount}</p>
+      <p>လိပ်စာ: စည်ပင်သာယာဈေးမြောက်ဘက် ၊ ကျောက်မြောင်းမြို့။</p>
+      <p>ဖုန်း 09-422229119 , 09-400950557 , 09-970395973</p>
     </div>
   `;
 
@@ -30,4 +30,4 @@ const _printVoucherService = (customers, selectedCustomer, quantity, unitPrice, 
   };
 };
 
-export default _printVoucherService;
+export default _handleVoucherService;

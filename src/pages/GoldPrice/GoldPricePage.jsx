@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ThemeProvider } from "@emotion/react";
 import theme from "../../theme";
 import {
@@ -6,33 +6,48 @@ import {
   TextField,
   Button,
   Box,
-  Grid
+  Grid,
+  CircularProgress
 } from "@mui/material";
 import DrawerComponent from "../../components/Drawer/DrawerComponent";
-import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import GoldPriceAPI from "../../api/Price/GoldPriceController";
+import UpdateGoldPriceAPI from "../../api/Price/UpdateGoldPriceController";
 
 export default function GoldPricePage({ history }) {
-  const [ywayPrice, setYwayPrice] = useState("");
+  const [priceID, setPriceID] = useState(null);
   const [lonePrice, setLonePrice] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleUpdate = () => {
-    // Simulate API call
-    axios.post('/api/update-gold-price', {
-      ywayPrice,
-      lonePrice
-    }).then(response => {
-      // Show toast message
+  useEffect(() => {
+    const fetchGoldPrices = async () => {
+      try {
+        const data = await GoldPriceAPI();
+        const { priceID, lonePrice } = data[0]; // Assuming response is an array with one item
+        setPriceID(priceID);
+        setLonePrice(lonePrice.toString()); // Convert to string to display in TextField
+      } catch (error) {
+        toast.error("Failed to fetch gold prices");
+      }
+    };
+    
+    fetchGoldPrices();
+  }, []);
+
+  const handleUpdate = async () => {
+    setIsLoading(true); // Set isLoading to true when update starts
+    try {
+      await UpdateGoldPriceAPI(priceID, lonePrice);
       toast.success("Gold Price updated");
-    }).catch(error => {
-      // Handle error
+    } catch (error) {
       toast.error("Failed to update Gold Price");
-    });
+    } finally {
+      setIsLoading(false); // Set isLoading to false when update completes (whether success or failure)
+    }
   };
 
   const handleClear = () => {
-    setYwayPrice("");
     setLonePrice("");
   };
 
@@ -44,24 +59,14 @@ export default function GoldPricePage({ history }) {
           Update Gold Price
         </Typography>
         <Grid container mt={1} spacing={2}>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              label="Yway Price"
-              variant="outlined"
-              fullWidth
-              value={ywayPrice}
-              type="number"
-              onChange={(e) => setYwayPrice(e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12}>
             <TextField
               label="Lone Price"
               variant="outlined"
               fullWidth
               value={lonePrice}
               type="number"
-              onChange={(e) => setLonePrice(e.target.value)}              
+              onChange={(e) => setLonePrice(e.target.value)}
             />
           </Grid>
           <Grid mt={3} item xs={12} sm={6}>
@@ -70,8 +75,13 @@ export default function GoldPricePage({ history }) {
               color="primary"
               fullWidth
               onClick={handleUpdate}
+              disabled={isLoading} // Disable button when loading
             >
-              Update
+              {isLoading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                "Update"
+              )}
             </Button>
           </Grid>
           <Grid mt={3} item xs={12} sm={6}>
@@ -80,11 +90,15 @@ export default function GoldPricePage({ history }) {
               color="secondary"
               fullWidth
               onClick={handleClear}
+              disabled={isLoading} // Disable button when loading
             >
               Clear
             </Button>
           </Grid>
         </Grid>
+        {isLoading && <Box display="flex" justifyContent="center" mt={2}>
+          <CircularProgress />
+        </Box>}
       </Box>
       <ToastContainer />
     </ThemeProvider>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -12,66 +12,97 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Paper
+  Paper,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
 } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
-import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
+import { Edit as EditIcon } from "@mui/icons-material";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import theme from "../../theme";
 import DrawerComponent from "../../components/Drawer/DrawerComponent";
+import BackDropComponent from "../../components/Loading/BackDropComponent";
+import GetCustomerAPI from "../../api/Customer/GetCustomerController";
+import CreateCustomerAPI from "../../api/Customer/CreateCustomerController"; // Import CreateCustomerAPI
 
-const CustomerPage = ({history}) => {
+const CustomerPage = ({ history }) => {
   const [customerName, setCustomerName] = useState("");
   const [customers, setCustomers] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [editCustomerName, setEditCustomerName] = useState("");
+  const [editCustomerIndex, setEditCustomerIndex] = useState(null);
+  const [updateLoading, setUpdateLoading] = useState(false); // State for update loading
 
-  const handleCreate = () => {
-    // Simulate API call
-    axios.post('/api/create-customer', { name: customerName })
-      .then(response => {
-        setCustomers([...customers, { name: customerName }]);
-        toast.success("Customer created");
-      })
-      .catch(error => {
-        toast.error("Failed to create customer");
-      });
+  useEffect(() => {
+    fetchCustomers();
+  }, []);
+
+  const fetchCustomers = async () => {
+    setIsLoading(true);
+    try {
+      const customerData = await GetCustomerAPI();
+      setCustomers(customerData);
+    } catch (error) {
+      toast.error("Failed to fetch customers");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleCreate = async () => {
+    setIsLoading(true);
+    try {
+      await CreateCustomerAPI(customerName); // Use CreateCustomerAPI to create customer
+      toast.success("Customer created");
+      await fetchCustomers();
+    } catch (error) {
+      toast.error("Failed to create customer");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleClear = () => {
     setCustomerName("");
   };
 
-  const handleEdit = (index) => {
-    // Simulate API call
-    axios.put(`/api/edit-customer/${index}`, { name: customerName })
-      .then(response => {
-        const updatedCustomers = [...customers];
-        updatedCustomers[index].name = customerName;
-        setCustomers(updatedCustomers);
-        toast.success("Customer updated");
-      })
-      .catch(error => {
-        toast.error("Failed to update customer");
-      });
+  const handleEditOpen = (index) => {
+    setEditCustomerName(customers[index].customerName);
+    setEditCustomerIndex(index);
+    setOpenDialog(true);
   };
 
-  const handleDelete = (index) => {
-    // Simulate API call
-    axios.delete(`/api/delete-customer/${index}`)
-      .then(response => {
-        const updatedCustomers = customers.filter((_, i) => i !== index);
-        setCustomers(updatedCustomers);
-        toast.success("Customer deleted");
-      })
-      .catch(error => {
-        toast.error("Failed to delete customer");
-      });
+  const handleEditClose = () => {
+    setOpenDialog(false);
+    setEditCustomerName("");
+    setEditCustomerIndex(null);
+  };
+
+  const handleUpdate = async () => {
+    setUpdateLoading(true); // Set loading to true when update starts
+    try {
+      // Simulate API call
+      await axios.put(`/api/edit-customer/${editCustomerIndex}`, { name: editCustomerName });
+      const updatedCustomers = [...customers];
+      updatedCustomers[editCustomerIndex].customerName = editCustomerName;
+      setCustomers(updatedCustomers);
+      toast.success("Customer updated");
+      handleEditClose();
+    } catch (error) {
+      toast.error("Failed to update customer");
+    } finally {
+      setUpdateLoading(false); // Set loading to false after API call completes
+    }
   };
 
   return (
     <ThemeProvider theme={theme}>
-      <DrawerComponent history={history}/>   
+      <DrawerComponent history={history}/>
       <Box mt={3} ml={4} mr={3}>
         <Typography variant="h5" gutterBottom>
           Manage Customers
@@ -82,7 +113,7 @@ const CustomerPage = ({history}) => {
               label="Customer Name"
               variant="outlined"
               fullWidth
-              value={customerName}              
+              value={customerName}
               onChange={(e) => setCustomerName(e.target.value)}
             />
           </Grid>
@@ -114,21 +145,15 @@ const CustomerPage = ({history}) => {
               <TableRow>
                 <TableCell>Customer Name</TableCell>
                 <TableCell align="right">Edit</TableCell>
-                <TableCell align="right">Delete</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {customers.map((customer, index) => (
                 <TableRow key={index}>
-                  <TableCell>{customer.name}</TableCell>
+                  <TableCell>{customer.customerName}</TableCell>
                   <TableCell align="right">
-                    <IconButton onClick={() => handleEdit(index)}>
+                    <IconButton onClick={() => handleEditOpen(index)}>
                       <EditIcon />
-                    </IconButton>
-                  </TableCell>
-                  <TableCell align="right">
-                    <IconButton onClick={() => handleDelete(index)}>
-                      <DeleteIcon />
                     </IconButton>
                   </TableCell>
                 </TableRow>
@@ -137,7 +162,32 @@ const CustomerPage = ({history}) => {
           </Table>
         </TableContainer>
       </Box>
+      {isLoading && <BackDropComponent />} {/* Show backdrop while loading */}
       <ToastContainer />
+
+      {/* Edit Customer Dialog */}
+      <Dialog open={openDialog} onClose={handleEditClose}>
+        <DialogTitle>Edit Customer</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Customer Name"
+            type="text"
+            fullWidth
+            value={editCustomerName}
+            onChange={(e) => setEditCustomerName(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleEditClose} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={handleUpdate} color="primary" disabled={updateLoading}>
+            {updateLoading ? 'Updating...' : 'Update'}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </ThemeProvider>
   );
 };
