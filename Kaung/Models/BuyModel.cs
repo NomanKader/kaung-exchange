@@ -3,7 +3,6 @@
     public class BuyModel
     {
         public int BuyId { get; set; }
-        public int CustomerId { get; set; }
         public string CustomerName { get; set; }
         public int YwayQuantity { get; set; }
         public int LoneQuantity { get; set; }

@@ -18,7 +18,6 @@ namespace Kaung.Services
             try
             {
                 BuyEntitie entitie = new BuyEntitie();
-                entitie.CustomerId = model.CustomerId;
                 entitie.CustomerName = model.CustomerName;
                 entitie.YwayQuantity = model.YwayQuantity;
                 entitie.LoneQuantity = model.LoneQuantity;
@@ -49,7 +48,6 @@ namespace Kaung.Services
                         .Select(x => new BuyModel
                         {
                             BuyId = x.BuyId,
-                            CustomerId = x.CustomerId,
                             CustomerName = x.CustomerName,
                             YwayQuantity = x.YwayQuantity,
                             LoneQuantity = x.LoneQuantity,
@@ -68,7 +66,6 @@ namespace Kaung.Services
                         .Select(x => new BuyModel
                         {
                             BuyId = x.BuyId,
-                            CustomerId = x.CustomerId,
                             CustomerName = x.CustomerName,
                             YwayQuantity = x.YwayQuantity,
                             LoneQuantity = x.LoneQuantity,
@@ -83,7 +80,6 @@ namespace Kaung.Services
                 return await _dbContext.BuyEntities.Select(x => new BuyModel
                 {
                     BuyId = x.BuyId,
-                    CustomerId = x.CustomerId,
                     CustomerName = x.CustomerName,
                     YwayQuantity = x.YwayQuantity,
                     LoneQuantity = x.LoneQuantity,
