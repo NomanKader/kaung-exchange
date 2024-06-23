@@ -5,14 +5,14 @@ const _handleVoucherService = (customerName,quantity, unitPrice, totalAmount) =>
   const printContent = `
     <div style="text-align: left;">
       <img src="https://i.ibb.co/tbJbPM5/viber-image-2024-06-15-05-54-18-471.jpg" alt="Company Logo" style="width: 100px; height: auto;"/>
-      <h2>ဟန်စည်-ရွေလုပ်ငန်း</h2>
+      <h2>ဟန်စည်-ရွေသန့်စင်လုပ်ငန်း</h2>
+      <p>လိပ်စာ: စည်ပင်သာယာဈေးမြောက်ဘက် ၊ ကျောက်မြောင်းမြို့။</p>
+      <p>ဖုန်း 09-422229119 , 09-400950557 , 09-970395973</p>
       <p>နေ့စွဲ: ${todayDate}</p>
       <p>အမည်: ${customerName}</p>
       <p>အရေအတွက်: ${quantity}</p>
       <p>ဈေးနူန်း: ${unitPrice}</p>
-      <p>ကျသင့်ငွေ: ${totalAmount}</p>
-      <p>လိပ်စာ: စည်ပင်သာယာဈေးမြောက်ဘက် ၊ ကျောက်မြောင်းမြို့။</p>
-      <p>ဖုန်း 09-422229119 , 09-400950557 , 09-970395973</p>
+      <p>ကျသင့်ငွေ: ${totalAmount}</p>      
     </div>
   `;
 

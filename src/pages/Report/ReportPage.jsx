@@ -25,55 +25,57 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import ClearIcon from '@mui/icons-material/Clear';
 import theme from "../../theme";
 import dayjs from 'dayjs';
+import GetBuyAPI from "../../api/Buy/GetBuyController";
+import GetCustomerAPI from "../../api/Customer/GetCustomerController";
 
 const ReportPage = ({ history }) => {
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
-  const [customer, setCustomer] = useState(null);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [customers, setCustomers] = useState([]);
   const [reportData, setReportData] = useState([]);
 
   useEffect(() => {
-    // Fetch customer list
-    axios.get('/api/customer-list')
-      .then(response => {
-        setCustomers(response.data);
-      })
-      .catch(error => {
-        toast.error("Failed to fetch customers");
-      });
+    // Fetch selectedCustomer list
+   const getCustomerList=async()=>{
+    const data=await GetCustomerAPI();
+    setCustomers(data);
+   }
+   getCustomerList();
   }, []);
 
-  const handleFilter = () => {
+  const handleFilter = async () => {
     if (!fromDate) {
       toast.error("Please choose a From Date first.");
       return;
     }
-
+  
     if (toDate && dayjs(toDate).isBefore(dayjs(fromDate))) {
       toast.error("To Date cannot be earlier than From Date.");
       return;
     }
-
-    // Simulate API call
-    axios.post('/api/report', { fromDate, toDate, customer })
-      .then(response => {
-        setReportData(response.data);
-        toast.success("Report fetched");
-      })
-      .catch(error => {
-        toast.error("Failed to fetch report");
-      });
+  
+    try {
+      console.log("Customer",selectedCustomer);
+      const response = await GetBuyAPI(fromDate, toDate,selectedCustomer);      
+      setReportData([]);
+      setReportData(response);
+      toast.success("Report fetched");
+    } catch (error) {
+      toast.error("Failed to fetch report");
+    }
   };
 
   const handleClear = () => {
     setFromDate(null);
     setToDate(null);
-    setCustomer(null);
+    setSelectedCustomer(null);
     setReportData([]);
     window.location.reload(); // Refresh the page
   };
-
+  const handleCustomerChange = (event, value) => {
+    setSelectedCustomer(value);    
+  };
   return (
     <ThemeProvider theme={theme}>
       <DrawerComponent history={history} />
@@ -103,14 +105,16 @@ const ReportPage = ({ history }) => {
             </LocalizationProvider>
           </Grid>
           <Grid item xs={12} sm={3}>
-            <Autocomplete
+          <Autocomplete
+              value={selectedCustomer}
+              onChange={handleCustomerChange}
               options={customers}
-              getOptionLabel={(option) => option.name}
-              value={customer}
-              onChange={(event, newValue) => setCustomer(newValue)}
-              renderInput={(params) => <TextField {...params} label="Customer Name" fullWidth />}
+              getOptionLabel={(option) => option.customerName}
+              renderInput={(params) => (
+                <TextField {...params} label="Select Customer" fullWidth />
+              )}
             />
-          </Grid>
+        </Grid>
           <Grid item xs={12} sm={2}>
             <Button
               variant="contained"
@@ -140,9 +144,11 @@ const ReportPage = ({ history }) => {
             <TableHead>
               <TableRow>
                 <TableCell>Customer Name</TableCell>
-                <TableCell>Unit</TableCell>
-                <TableCell>Quantity</TableCell>
-                <TableCell>Unit Price</TableCell>
+                <TableCell>Yway Qty</TableCell>
+                <TableCell>Lone Qty</TableCell>
+                <TableCell>Pae Qty</TableCell>
+                <TableCell>Si Qty</TableCell>
+                <TableCell>Price</TableCell>
                 <TableCell>Total Amount</TableCell>
                 <TableCell>Kyat Amount</TableCell>
               </TableRow>
@@ -151,9 +157,11 @@ const ReportPage = ({ history }) => {
               {reportData.map((data, index) => (
                 <TableRow key={index}>
                   <TableCell>{data.customerName}</TableCell>
-                  <TableCell>{data.unit}</TableCell>
-                  <TableCell>{data.quantity}</TableCell>
-                  <TableCell>{data.unitPrice}</TableCell>
+                  <TableCell>{data.ywayQuantity}</TableCell>
+                  <TableCell>{data.loneQuantity}</TableCell>
+                  <TableCell>{data.paeQuantity}</TableCell>
+                  <TableCell>{data.siQuantity}</TableCell>
+                  <TableCell>{data.loneUnitPrice}</TableCell>
                   <TableCell>{data.totalAmount}</TableCell>
                   <TableCell>{data.kyatAmount}</TableCell>
                 </TableRow>

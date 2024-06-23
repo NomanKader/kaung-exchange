@@ -1,7 +1,7 @@
 import axios from 'axios';
 import _handleDecryptTokenService from '../../service/crypto/DecryptTokenService';
 
-const BuyGoldAPI = async (customerId, unit, quantity, unitPrice, totalAmount, kyatAmount) => {
+const BuyGoldAPI = async (customerName,ywayQuantity,loneQuantity,paeQuantity,siQuantity,loneUnitPrice,totalAmount,kyatAmount) => {
   try {
     // Retrieve the encrypted token from sessionStorage
     const encryptedToken = sessionStorage.getItem('token');
@@ -11,12 +11,14 @@ const BuyGoldAPI = async (customerId, unit, quantity, unitPrice, totalAmount, ky
     const response = await axios.post(
       `${process.env.REACT_APP_API_ENDPOINT}buy`, 
       {
-        customerId: customerId,
-        unit: unit,
-        quantity: quantity,
-        unitPrice: unitPrice,
+        customerName: customerName,
+        ywayQuantity: ywayQuantity,
+        loneQuantity: loneQuantity,
+        paeQuantity: paeQuantity,
+        siQuantity: siQuantity,
+        loneUnitPrice: loneUnitPrice,
         totalAmount: totalAmount,
-        kyatAmount: kyatAmount
+        kyatAmount: kyatAmount,
       }, 
       {
         headers: {

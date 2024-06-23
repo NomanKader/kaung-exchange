@@ -6,6 +6,7 @@ import {
   TextField,
   Button,
   Box,
+  Card, CardContent,
 } from "@mui/material";
 import DrawerComponent from "../../components/Drawer/DrawerComponent";
 import theme from "../../theme";
@@ -16,6 +17,8 @@ import GetCustomerAPI from "../../api/Customer/GetCustomerController";
 import Autocomplete from "@mui/material/Autocomplete";
 import GoldPriceAPI from "../../api/Price/GoldPriceController";
 import _handlePrintService from '../../service/print/PrintService';
+import GetBuyAPI from "../../api/Buy/GetBuyController";
+import dayjs from "dayjs";
 
 export default function BuyPage({ history }) {
   const [customers, setCustomers] = useState([]);
@@ -30,11 +33,17 @@ export default function BuyPage({ history }) {
   const [totalAmount, setTotalAmount] = useState(0);
   const [loading, setLoading] = useState(false); // State to manage loading state
   const [customerSelected, setCustomerSelected] = useState(true); // State to manage customer selection
-
+  const [totalKyatAmount,setTotalKyatAmount]=useState("");
   useEffect(() => {
     fetchCustomers();
+    fetchBuyData();
   }, []);
-
+  const fetchBuyData=async()=>{
+    const response=await GetBuyAPI(dayjs().format('YYYY-MM-DD'),dayjs().format('YYYY-MM-DD'),"");
+    const totalKyatAmount = response.reduce((acc, item) => acc + parseFloat(item.kyatAmount), 0).toFixed(2);
+    console.log("Kyat Amount",totalKyatAmount);
+    setTotalKyatAmount(totalKyatAmount);
+  }
   useEffect(() => {
     fetchGoldPrice("Yway");
   }, []);
@@ -115,14 +124,18 @@ export default function BuyPage({ history }) {
 
     const { loneQty } = unitQuantities;
     const quantity = loneQty !== "" ? parseFloat(loneQty) : 0;
-
-    await BuyGoldAPI(
-      selectedCustomer.id,
-      "Lone",
-      quantity,
+    let totalLoneQty=totalAmount/unitPrice;    
+    let pae = totalLoneQty/3.125;
+    let kyat=pae/16;
+    await BuyGoldAPI(      
+      selectedCustomer.customerName,
+      unitQuantities.ywayQty || 0,
+      unitQuantities.loneQty || 0,
+      unitQuantities.paeQty || 0,
+      unitQuantities.siQty || 0,
       unitPrice,
       totalAmount,
-      "10000"
+      kyat.toString()
     )
       .then(() => {
         toast.success("Buy successful");
@@ -135,7 +148,8 @@ export default function BuyPage({ history }) {
       .finally(() => {
         setLoading(false);
       });
-  };
+      fetchBuyData();
+    };
   const handleClear = () => {
     setSelectedCustomer(null);
     setUnitQuantities({
@@ -193,13 +207,13 @@ export default function BuyPage({ history }) {
           </Grid>
           <Grid item xs={12} sm={3}>
             <TextField
-              label="Enter Pae Qty"
+              label="Enter Si Qty"
               fullWidth
-              value={unitQuantities.paeQty}
+              value={unitQuantities.siQty}
               onChange={(e) =>
                 setUnitQuantities({
                   ...unitQuantities,
-                  paeQty: e.target.value,
+                  siQty: e.target.value,
                 })
               }
             />
@@ -213,19 +227,6 @@ export default function BuyPage({ history }) {
                 setUnitQuantities({
                   ...unitQuantities,
                   ywayQty: e.target.value,
-                })
-              }
-            />
-          </Grid>
-          <Grid item xs={12} sm={3}>
-            <TextField
-              label="Enter Si Qty"
-              fullWidth
-              value={unitQuantities.siQty}
-              onChange={(e) =>
-                setUnitQuantities({
-                  ...unitQuantities,
-                  siQty: e.target.value,
                 })
               }
             />
@@ -261,8 +262,26 @@ export default function BuyPage({ history }) {
             </Button>
           </Grid>
         </Grid>
+        {/* Add Card to show the total Kyat Amount buy in today. */}
       </Box>
+      <Grid container direction='column' spacing={2} justifyContent="flex-start" ml={1} mt={2}>
+      <Grid item>
+      <Typography variant="h5" component="div" fontWeight='bold' gutterBottom color={theme.palette.primary.main}>
+              Today Buy
+        </Typography>
+      </Grid>  
+      <Grid item xs={3}>
+        <Card elevation={3} sx={{ maxWidth: 275 ,padding:3,borderRadius:3}}>
+          <CardContent>
+            <Typography variant="h6" component="div">
+              {totalKyatAmount!=""?totalKyatAmount:"Loading..."} ကျပ်
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
       <ToastContainer />
+
     </ThemeProvider>
   );
 }
