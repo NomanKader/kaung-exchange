@@ -22,6 +22,7 @@ namespace Kaung.Services
                 if (priceEntitie != null)
                 {
                     priceEntitie.LonePrice = model.LonePrice;
+                    priceEntitie.YwayPrice = model.YwayPrice;
                     _dbContext.PriceEntities.Update(priceEntitie);
                     return await _dbContext.SaveChangesAsync();
                 }
@@ -41,7 +42,8 @@ namespace Kaung.Services
                 return await _dbContext.PriceEntities.Select(x => new PriceModel
                 {
                     PriceID = x.PriceID,
-                    LonePrice = x.LonePrice
+                    LonePrice = x.LonePrice,
+                    YwayPrice = x.YwayPrice,
                 }).ToListAsync();
             }
             catch (Exception ex)
