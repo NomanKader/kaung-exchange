@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Kaung")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+21b868f0c69a76b27764341779574ae593107568")]
 [assembly: System.Reflection.AssemblyProductAttribute("Kaung")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Kaung")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
