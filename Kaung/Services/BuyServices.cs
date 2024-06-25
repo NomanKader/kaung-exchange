@@ -23,6 +23,9 @@ namespace Kaung.Services
                 entitie.LoneQuantity = model.LoneQuantity;
                 entitie.PaeQuantity = model.PaeQuantity;
                 entitie.SiQuantity = model.SiQuantity;
+                entitie.BFLoneQuantity = model.BFLoneQuantity;
+                entitie.BFSiQuantity = model.BFSiQuantity;
+                entitie.BFYwayQuantity = model.BFYwayQuantity;
                 entitie.LoneUnitPrice = model.LoneUnitPrice;
                 entitie.TotalAmount = model.TotalAmount;
                 entitie.KyatAmount = model.KyatAmount;
@@ -53,6 +56,9 @@ namespace Kaung.Services
                             LoneQuantity = x.LoneQuantity,
                             PaeQuantity = x.PaeQuantity,
                             SiQuantity = x.SiQuantity,
+                            BFLoneQuantity = x.BFLoneQuantity,
+                            BFYwayQuantity = x.BFYwayQuantity,
+                            BFSiQuantity = x.BFSiQuantity,
                             LoneUnitPrice = x.LoneUnitPrice,
                             TotalAmount = x.TotalAmount,
                             KyatAmount = x.KyatAmount,
@@ -71,6 +77,9 @@ namespace Kaung.Services
                             LoneQuantity = x.LoneQuantity,
                             PaeQuantity = x.PaeQuantity,
                             SiQuantity = x.SiQuantity,
+                            BFLoneQuantity = x.BFLoneQuantity,
+                            BFYwayQuantity = x.BFYwayQuantity,
+                            BFSiQuantity = x.BFSiQuantity,
                             LoneUnitPrice = x.LoneUnitPrice,
                             TotalAmount = x.TotalAmount,
                             KyatAmount = x.KyatAmount,
@@ -85,6 +94,9 @@ namespace Kaung.Services
                     LoneQuantity = x.LoneQuantity,
                     PaeQuantity = x.PaeQuantity,
                     SiQuantity = x.SiQuantity,
+                    BFLoneQuantity = x.BFLoneQuantity,
+                    BFYwayQuantity = x.BFYwayQuantity,
+                    BFSiQuantity = x.BFSiQuantity,
                     LoneUnitPrice = x.LoneUnitPrice,
                     TotalAmount = x.TotalAmount,
                     KyatAmount = x.KyatAmount,
