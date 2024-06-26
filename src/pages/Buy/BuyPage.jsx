@@ -6,7 +6,13 @@ import {
   TextField,
   Button,
   Box,
-  Card, CardContent,
+  CardContent,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+  FormLabel,
+  Paper,
 } from "@mui/material";
 import DrawerComponent from "../../components/Drawer/DrawerComponent";
 import theme from "../../theme";
@@ -16,9 +22,10 @@ import BuyGoldAPI from "../../api/Buy/CreateBuyController";
 import GetCustomerAPI from "../../api/Customer/GetCustomerController";
 import Autocomplete from "@mui/material/Autocomplete";
 import GoldPriceAPI from "../../api/Price/GoldPriceController";
-import _handlePrintService from '../../service/print/PrintService';
+import _handlePrintService from "../../service/print/PrintService";
 import GetBuyAPI from "../../api/Buy/GetBuyController";
 import dayjs from "dayjs";
+import PaperComponent from "../../components/Paper/PaperComponent";
 
 export default function BuyPage({ history }) {
   const [customers, setCustomers] = useState([]);
@@ -28,24 +35,43 @@ export default function BuyPage({ history }) {
     paeQty: "",
     ywayQty: "",
     siQty: "",
+    bfLoneQty: "",
+    bfYwayQty: "",
+    bfSiQty: "",
   });
   const [unitPrice, setUnitPrice] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
   const [loading, setLoading] = useState(false); // State to manage loading state
   const [customerSelected, setCustomerSelected] = useState(true); // State to manage customer selection
-  const [totalKyatAmount,setTotalKyatAmount]=useState("");
+  const [totalKyatAmount, setTotalKyatAmount] = useState("");
+  const [totalBuyAmount,setTotalBuyAmount]=useState("");
+  const [unitType, setUnitType] = useState("LS");
+  const [goldPriceData, setGoldPriceData] = useState();
+
   useEffect(() => {
     fetchCustomers();
     fetchBuyData();
   }, []);
-  const fetchBuyData=async()=>{
-    const response=await GetBuyAPI(dayjs().format('YYYY-MM-DD'),dayjs().format('YYYY-MM-DD'),"");
-    const totalKyatAmount = response.reduce((acc, item) => acc + parseFloat(item.kyatAmount), 0).toFixed(2);
-    console.log("Kyat Amount",totalKyatAmount);
+
+  const fetchBuyData = async () => {
+    console.log("Selected Customer", selectedCustomer);
+    const response = await GetBuyAPI(
+      dayjs().format("YYYY-MM-DD"),
+      dayjs().format("YYYY-MM-DD"),
+      ""
+    );
+    const totalKyatAmount = response
+      .reduce((acc, item) => acc + parseFloat(item.kyatAmount), 0)
+      .toFixed(2);
+    const totalBuyAmount = response
+      .reduce((acc, item) => acc + parseFloat(item.totalAmount), 0)
+      .toFixed(2);    
     setTotalKyatAmount(totalKyatAmount);
-  }
+    setTotalBuyAmount(totalBuyAmount);
+  };
+
   useEffect(() => {
-    fetchGoldPrice("Yway");
+    fetchGoldPrice();
   }, []);
 
   useEffect(() => {
@@ -62,10 +88,11 @@ export default function BuyPage({ history }) {
     }
   };
 
-  const fetchGoldPrice = async (type) => {
+  const fetchGoldPrice = async () => {
     try {
-      const goldPriceData = await GoldPriceAPI();
-      const price = goldPriceData[0].lonePrice;
+      const data = await GoldPriceAPI();
+      setGoldPriceData(data);
+      const price = data[0].lonePrice;
       setUnitPrice(price);
       calculateTotalAmount();
     } catch (error) {
@@ -76,24 +103,31 @@ export default function BuyPage({ history }) {
 
   const calculateTotalAmount = () => {
     let totalLoneQty = 0;
+    if (unitType == "LS") {
+      totalLoneQty +=
+        unitQuantities.loneQty !== "" ? parseFloat(unitQuantities.loneQty) : 0;
+      totalLoneQty +=
+        unitQuantities.paeQty !== ""
+          ? parseFloat(unitQuantities.paeQty) * 3.125
+          : 0;
+      totalLoneQty +=
+        unitQuantities.ywayQty !== ""
+          ? parseFloat(unitQuantities.ywayQty) * parseInt(unitPrice)
+          : 0;
+      totalLoneQty +=
+        unitQuantities.siQty !== "" ? parseFloat(unitQuantities.siQty) / 16 : 0;
 
-    totalLoneQty +=
-      unitQuantities.loneQty !== "" ? parseFloat(unitQuantities.loneQty) : 0;
-    totalLoneQty +=
-      unitQuantities.paeQty !== ""
-        ? parseFloat(unitQuantities.paeQty) * 3.125
-        : 0;
-    totalLoneQty +=
-      unitQuantities.ywayQty !== ""
-        ? parseFloat(unitQuantities.ywayQty) / 8 * 3.125
-        : 0;
-    totalLoneQty +=
-      unitQuantities.siQty !== "" ? parseFloat(unitQuantities.siQty) / 16 : 0;
-
-    const amount = totalLoneQty * unitPrice;
-    const roundedAmount = Math.round(amount); // Round to nearest whole number
-    setTotalAmount(roundedAmount);    
+      const amount = totalLoneQty * unitPrice;
+      const roundedAmount = Math.round(amount); // Round to nearest whole number
+      setTotalAmount(roundedAmount);
+    } else {
+      let ywayAmount =
+        unitQuantities.ywayQty !== "" ? parseFloat(unitQuantities.ywayQty) : 0;
+      console.log("Unit Price", unitPrice);
+      setTotalAmount(ywayAmount * unitPrice);
+    }
   };
+
   const formatQuantity = () => {
     let formattedQuantity = "";
 
@@ -112,6 +146,21 @@ export default function BuyPage({ history }) {
 
     return formattedQuantity;
   };
+  const handleRadio = (value) => {
+    if (value == "LS") {
+      setUnitPrice(parseInt(goldPriceData[0].lonePrice));
+      unitQuantities.ywayQty = "";
+      setUnitType("LS");
+      setTotalAmount(0);
+    } else {
+      console.log("Gold Price Data", goldPriceData[0]);
+      setUnitPrice(parseInt(goldPriceData[0].ywayPrice));
+      unitQuantities.loneQty = "";
+      unitQuantities.siQty = "";
+      setTotalAmount(0);
+      setUnitType("Yway");
+    }
+  };
   const handleBuy = async () => {
     setLoading(true);
 
@@ -121,26 +170,43 @@ export default function BuyPage({ history }) {
       setLoading(false);
       return;
     }
+    let kyat = "0";
+    if (unitType == "LS") {
+      const { siQty } = unitQuantities;
+      const { loneQty } = unitQuantities;
+      let lone = parseInt(siQty || 0) / 16;
+      let totalLoneQty = lone + parseInt(loneQty || 0);
+      let pae = parseInt(totalLoneQty || 0) / 3.125;
+      kyat = pae / 16;
+    } else {
+      const { ywayQty } = unitQuantities;
+      let pae = parseInt(ywayQty || 0) / 8;
+      kyat = pae / 16;
+    }
 
-    const { loneQty } = unitQuantities;
-    const quantity = loneQty !== "" ? parseFloat(loneQty) : 0;
-    let totalLoneQty=totalAmount/unitPrice;    
-    let pae = totalLoneQty/3.125;
-    let kyat=pae/16;
-    await BuyGoldAPI(      
+    console.log("Kyat", kyat.toString());
+    await BuyGoldAPI(
       selectedCustomer.customerName,
-      unitQuantities.ywayQty || 0,
-      unitQuantities.loneQty || 0,
-      unitQuantities.paeQty || 0,
-      unitQuantities.siQty || 0,
-      unitPrice,
-      totalAmount,
+      parseInt(unitQuantities.ywayQty) || 0,
+      parseInt(unitQuantities.loneQty) || 0,
+      parseInt(unitQuantities.paeQty) || 0,
+      parseInt(unitQuantities.siQty) || 0,
+      parseInt(unitPrice),
+      parseInt(unitQuantities.bfLoneQty) || 0,
+      parseInt(unitQuantities.bfYwayQty) || 0,
+      parseInt(unitQuantities.bfs) || 0,
+      parseInt(totalAmount || 0),
       kyat.toString()
     )
       .then(() => {
         toast.success("Buy successful");
         const quantity = formatQuantity();
-        _handlePrintService(selectedCustomer.customerName, quantity, unitPrice+' ကျပ်', totalAmount+' ကျပ်');    
+        _handlePrintService(
+          selectedCustomer.customerName,
+          quantity,
+          unitPrice + " ကျပ်",
+          totalAmount + " ကျပ်"
+        );
       })
       .catch((error) => {
         toast.error("Error during buy");
@@ -148,8 +214,8 @@ export default function BuyPage({ history }) {
       .finally(() => {
         setLoading(false);
       });
-      fetchBuyData();
-    };
+    fetchBuyData();
+  };
   const handleClear = () => {
     setSelectedCustomer(null);
     setUnitQuantities({
@@ -157,6 +223,9 @@ export default function BuyPage({ history }) {
       paeQty: "",
       ywayQty: "",
       siQty: "",
+      bfLoneQty: "",
+      bfYwayQty: "",
+      bfSiQty: "",
     });
     setUnitPrice(0);
     setTotalAmount(0);
@@ -172,11 +241,31 @@ export default function BuyPage({ history }) {
     <ThemeProvider theme={theme}>
       <DrawerComponent history={history} />
       <Box mt={3} mx={2}>
-        <Typography variant="h6" align="center" fontWeight="bold" mb={2}>
-          Buy Gold
-        </Typography>
         <Grid container spacing={2}>
+          <Typography variant="h6" align="left" fontWeight="bold" mt={1} ml={2}>
+            Buy Gold
+          </Typography>
           <Grid item xs={12}>
+            <FormControl component="fieldset">
+              <RadioGroup
+                row
+                value={unitType}
+                onChange={(e) => handleRadio(e.target.value)}
+              >
+                <FormControlLabel
+                  value="LS"
+                  control={<Radio />}
+                  label="လုံး/စိ"
+                />
+                <FormControlLabel
+                  value="Yway"
+                  control={<Radio />}
+                  label="ရွေး"
+                />
+              </RadioGroup>
+            </FormControl>
+          </Grid>
+          <Grid item xs={6}>
             <Autocomplete
               value={selectedCustomer}
               onChange={handleCustomerChange}
@@ -192,46 +281,120 @@ export default function BuyPage({ history }) {
               </Typography>
             )}
           </Grid>
+          <Grid item xs={12}>
+            <Typography variant="h6" color="error" fontWeight="bold">
+              မီးမစစ်ခင်
+            </Typography>
+          </Grid>
+          {/* Before Fire Quantity */}
+          {unitType == "LS" ? (
+            <>
+              <Grid item xs={12} sm={3}>
+                <TextField
+                  label="Enter BF Lone Qty"
+                  fullWidth
+                  value={unitQuantities.bfLoneQty}
+                  onChange={(e) =>
+                    setUnitQuantities({
+                      ...unitQuantities,
+                      bfLoneQty: e.target.value,
+                    })
+                  }
+                />
+              </Grid>
+              <Grid item xs={12} sm={3}>
+                <TextField
+                  label="Enter BF Si Qty"
+                  fullWidth
+                  value={unitQuantities.bfSiQty}
+                  onChange={(e) =>
+                    setUnitQuantities({
+                      ...unitQuantities,
+                      bfSiQty: e.target.value,
+                    })
+                  }
+                />
+              </Grid>
+            </>
+          ) : (
+            <Grid item xs={12} sm={3}>
+              <TextField
+                label="Enter BF Yway Qty"
+                fullWidth
+                value={unitQuantities.bfYwayQty}
+                onChange={(e) =>
+                  setUnitQuantities({
+                    ...unitQuantities,
+                    bfYwayQty: e.target.value,
+                  })
+                }
+              />
+            </Grid>
+          )}
+          <Grid item xs={12}>
+            <Typography variant="h6" color="primary" fontWeight="bold">
+              မီးစစ်ပြီး
+            </Typography>
+          </Grid>
+          {unitType == "LS" ? (
+            <>
+              <Grid item xs={12} sm={3}>
+                <TextField
+                  label="Enter Lone Qty"
+                  type="number"
+                  fullWidth
+                  value={unitQuantities.loneQty}
+                  onChange={(e) =>
+                    setUnitQuantities({
+                      ...unitQuantities,
+                      loneQty: e.target.value,
+                    })
+                  }
+                />
+              </Grid>
+              <Grid item xs={12} sm={3}>
+                <TextField
+                  label="Enter Si Qty"
+                  type="number"
+                  fullWidth
+                  value={unitQuantities.siQty}
+                  onChange={(e) =>
+                    setUnitQuantities({
+                      ...unitQuantities,
+                      siQty: e.target.value,
+                    })
+                  }
+                />
+              </Grid>
+            </>
+          ) : (
+            <Grid item xs={12} sm={3}>
+              <TextField
+                label="Enter Yway Qty"
+                fullWidth
+                type="number"
+                value={unitQuantities.ywayQty}
+                onChange={(e) =>
+                  setUnitQuantities({
+                    ...unitQuantities,
+                    ywayQty: e.target.value,
+                  })
+                }
+              />
+            </Grid>
+          )}
+        </Grid>
+        <Grid container spacing={2} mt={2}>
           <Grid item xs={12} sm={3}>
             <TextField
-              label="Enter Lone Qty"
+              disabled
+              label="Unit Price"
               fullWidth
-              value={unitQuantities.loneQty}
-              onChange={(e) =>
-                setUnitQuantities({
-                  ...unitQuantities,
-                  loneQty: e.target.value,
-                })
-              }
+              value={unitPrice}
+              onChange={(e) => setUnitPrice(e.target.value)}
             />
           </Grid>
           <Grid item xs={12} sm={3}>
-            <TextField
-              label="Enter Si Qty"
-              fullWidth
-              value={unitQuantities.siQty}
-              onChange={(e) =>
-                setUnitQuantities({
-                  ...unitQuantities,
-                  siQty: e.target.value,
-                })
-              }
-            />
-          </Grid>
-          <Grid item xs={12} sm={3}>
-            <TextField
-              label="Enter Yway Qty"
-              fullWidth
-              value={unitQuantities.ywayQty}
-              onChange={(e) =>
-                setUnitQuantities({
-                  ...unitQuantities,
-                  ywayQty: e.target.value,
-                })
-              }
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
             <TextField
               label="Total Amount"
               fullWidth
@@ -239,49 +402,45 @@ export default function BuyPage({ history }) {
               disabled
             />
           </Grid>
-          <Grid item xs={12} sm={6} mt={1}>
-            <Button
-              variant="outlined"
-              color="secondary"
-              fullWidth
-              onClick={handleClear}              
-            >
-              Clear
-            </Button>
-          </Grid>
-          <Grid item xs={12}>
+        </Grid>
+        <Grid container spacing={2} mt={2}>
+          <Grid item xs={3}>
             <Button
               variant="contained"
               color="primary"
               fullWidth
               onClick={handleBuy}
-              disabled={!customerSelected || totalAmount === 0 || loading}
-              size='large'
+              disabled={loading} // Disable button when loading
             >
               {loading ? "Buying..." : "Buy"}
             </Button>
           </Grid>
+          <Grid item xs={3}>
+            <Button
+              fullWidth
+              variant="outlined"
+              color="secondary"
+              onClick={handleClear}
+            >
+              Clear
+            </Button>
+          </Grid>
         </Grid>
-        {/* Add Card to show the total Kyat Amount buy in today. */}
-      </Box>
-      <Grid container direction='column' spacing={2} justifyContent="flex-start" ml={1} mt={2}>
-      <Grid item>
-      <Typography variant="h5" component="div" fontWeight='bold' gutterBottom color={theme.palette.primary.main}>
-              Today Buy
-        </Typography>
-      </Grid>  
-      <Grid item xs={3}>
-        <Card elevation={3} sx={{ maxWidth: 275 ,padding:3,borderRadius:3}}>
-          <CardContent>
-            <Typography variant="h6" component="div">
-              {totalKyatAmount!=""?totalKyatAmount:"Loading..."} ကျပ်
+        <Grid container spacing={2} mt={2} mb={2}>
+          <Grid item xs={12}>
+            <Typography variant="h6" fontWeight="bold">
+              ဒီနေ့အဝယ်စာရင်း
             </Typography>
-          </CardContent>
-        </Card>
-      </Grid>
-    </Grid>
+          </Grid>
+          <Grid item xs={3}>
+            <PaperComponent header={"ရွှေအလေးချိန်"} value={totalKyatAmount} />
+          </Grid>
+          <Grid item xs={3}>
+            <PaperComponent header={"စုစုပေါင်းငွေ"} value={totalBuyAmount} />
+          </Grid>
+        </Grid>
+      </Box>
       <ToastContainer />
-
     </ThemeProvider>
   );
 }

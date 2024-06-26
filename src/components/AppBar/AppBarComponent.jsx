@@ -17,7 +17,7 @@ export default function AppBarComponent({onClick,history}) {
             <MenuIcon />
           </IconButton>
           <Typography variant='h6' color="inherit" component="div">
-          ဟန်စည်-ရွေသန့်စင်လုပ်ငန်း
+          ဟန်စည်-ရွှေသန့်စင်လုပ်ငန်း
           </Typography>                    
             <Button onClick={()=>_handleLogoutService(history)} sx={{position:'absolute',right:10}} color='error' variant='contained'>Logout</Button>                  
         </Toolbar>

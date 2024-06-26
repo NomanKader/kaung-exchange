@@ -3,7 +3,8 @@
 import axios from 'axios';
 import _handleDecryptTokenService from '../../service/crypto/DecryptTokenService';
 
-const UpdateGoldPriceAPI = async (priceID, lonePrice) => {
+const UpdateGoldPriceAPI = async (priceID, lonePrice, ywayPrice) => {
+  console.log("Yway Price",ywayPrice);
   try {
     const encryptedToken = sessionStorage.getItem('token');
     if (!encryptedToken) {
@@ -19,7 +20,8 @@ const UpdateGoldPriceAPI = async (priceID, lonePrice) => {
 
     const response = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}price`, {
       priceID,      
-      lonePrice
+      lonePrice,
+      ywayPrice
     }, {
       headers: {
         'Content-Type': 'application/json',

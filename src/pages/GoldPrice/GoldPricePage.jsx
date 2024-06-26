@@ -18,15 +18,17 @@ import UpdateGoldPriceAPI from "../../api/Price/UpdateGoldPriceController";
 export default function GoldPricePage({ history }) {
   const [priceID, setPriceID] = useState(null);
   const [lonePrice, setLonePrice] = useState("");
+  const [ywayPrice, setYwayPrice] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchGoldPrices = async () => {
       try {
         const data = await GoldPriceAPI();
-        const { priceID, lonePrice } = data[0]; // Assuming response is an array with one item
+        const { priceID, lonePrice, ywayPrice } = data[0]; // Assuming response is an array with one item
         setPriceID(priceID);
         setLonePrice(lonePrice.toString()); // Convert to string to display in TextField
+        setYwayPrice(ywayPrice.toString()); // Convert to string to display in TextField
       } catch (error) {
         toast.error("Failed to fetch gold prices");
       }
@@ -38,7 +40,7 @@ export default function GoldPricePage({ history }) {
   const handleUpdate = async () => {
     setIsLoading(true); // Set isLoading to true when update starts
     try {
-      await UpdateGoldPriceAPI(priceID, lonePrice);
+      await UpdateGoldPriceAPI(priceID, lonePrice, ywayPrice);
       toast.success("Gold Price updated");
     } catch (error) {
       toast.error("Failed to update Gold Price");
@@ -49,6 +51,7 @@ export default function GoldPricePage({ history }) {
 
   const handleClear = () => {
     setLonePrice("");
+    setYwayPrice("");
   };
 
   return (
@@ -67,6 +70,16 @@ export default function GoldPricePage({ history }) {
               value={lonePrice}
               type="number"
               onChange={(e) => setLonePrice(e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              label="Yway Price"
+              variant="outlined"
+              fullWidth
+              value={ywayPrice}
+              type="number"
+              onChange={(e) => setYwayPrice(e.target.value)}
             />
           </Grid>
           <Grid mt={3} item xs={12} sm={6}>

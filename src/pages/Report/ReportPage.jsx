@@ -31,7 +31,7 @@ import GetCustomerAPI from "../../api/Customer/GetCustomerController";
 const ReportPage = ({ history }) => {
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
-  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [selectedCustomer, setSelectedCustomer] = useState("");
   const [customers, setCustomers] = useState([]);
   const [reportData, setReportData] = useState([]);
 
@@ -56,12 +56,13 @@ const ReportPage = ({ history }) => {
     }
   
     try {
-      console.log("Customer",selectedCustomer);
-      const response = await GetBuyAPI(fromDate, toDate,selectedCustomer);      
+      console.log("Customer",selectedCustomer.customerName);
+      const response = await GetBuyAPI(fromDate, toDate,selectedCustomer?.customerName || "");      
       setReportData([]);
       setReportData(response);
       toast.success("Report fetched");
     } catch (error) {
+      console.error("Error at fetch buy",error);
       toast.error("Failed to fetch report");
     }
   };
@@ -80,7 +81,7 @@ const ReportPage = ({ history }) => {
     <ThemeProvider theme={theme}>
       <DrawerComponent history={history} />
       <Box mt={3} ml={4} mr={3}>
-        <Typography variant="h4" gutterBottom>
+        <Typography variant="h6" gutterBottom mt={1} mb={3} ml={1}>
           Report
         </Typography>
         <Grid container spacing={2} alignItems="center">
@@ -106,7 +107,7 @@ const ReportPage = ({ history }) => {
           </Grid>
           <Grid item xs={12} sm={3}>
           <Autocomplete
-              value={selectedCustomer}
+              // value={selectedCustomer}
               onChange={handleCustomerChange}
               options={customers}
               getOptionLabel={(option) => option.customerName}
@@ -144,10 +145,12 @@ const ReportPage = ({ history }) => {
             <TableHead>
               <TableRow>
                 <TableCell>Customer Name</TableCell>
-                <TableCell>Yway Qty</TableCell>
                 <TableCell>Lone Qty</TableCell>
-                <TableCell>Pae Qty</TableCell>
                 <TableCell>Si Qty</TableCell>
+                <TableCell>Yway Qty</TableCell>                                                
+                <TableCell>BF Lone Qty</TableCell>                
+                <TableCell>BF Si Qty</TableCell>
+                <TableCell>BF Yway Qty</TableCell>
                 <TableCell>Price</TableCell>
                 <TableCell>Total Amount</TableCell>
                 <TableCell>Kyat Amount</TableCell>
@@ -157,10 +160,12 @@ const ReportPage = ({ history }) => {
               {reportData.map((data, index) => (
                 <TableRow key={index}>
                   <TableCell>{data.customerName}</TableCell>
-                  <TableCell>{data.ywayQuantity}</TableCell>
                   <TableCell>{data.loneQuantity}</TableCell>
-                  <TableCell>{data.paeQuantity}</TableCell>
                   <TableCell>{data.siQuantity}</TableCell>
+                  <TableCell>{data.ywayQuantity}</TableCell>                                    
+                  <TableCell>{data.bfLoneQuantity}</TableCell>                  
+                  <TableCell>{data.bfSiQuantity}</TableCell>
+                  <TableCell>{data.bfYwayQuantity}</TableCell>
                   <TableCell>{data.loneUnitPrice}</TableCell>
                   <TableCell>{data.totalAmount}</TableCell>
                   <TableCell>{data.kyatAmount}</TableCell>

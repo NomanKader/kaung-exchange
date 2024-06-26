@@ -1,15 +1,27 @@
-import axios from 'axios';
-import _handleDecryptTokenService from '../../service/crypto/DecryptTokenService';
+import axios from "axios";
+import _handleDecryptTokenService from "../../service/crypto/DecryptTokenService";
 
-const BuyGoldAPI = async (customerName,ywayQuantity,loneQuantity,paeQuantity,siQuantity,loneUnitPrice,totalAmount,kyatAmount) => {
+const BuyGoldAPI = async (
+  customerName,
+  ywayQuantity,
+  loneQuantity,
+  paeQuantity,
+  siQuantity,
+  loneUnitPrice,
+  bfLoneQuantity,
+  bfYwayQuantity,
+  bfSiQuantity,
+  totalAmount,
+  kyatAmount
+) => {
   try {
     // Retrieve the encrypted token from sessionStorage
-    const encryptedToken = sessionStorage.getItem('token');
+    const encryptedToken = sessionStorage.getItem("token");
     const token = _handleDecryptTokenService(encryptedToken);
 
     // Make API call to buy gold
     const response = await axios.post(
-      `${process.env.REACT_APP_API_ENDPOINT}buy`, 
+      `${process.env.REACT_APP_API_ENDPOINT}buy`,
       {
         customerName: customerName,
         ywayQuantity: ywayQuantity,
@@ -17,14 +29,17 @@ const BuyGoldAPI = async (customerName,ywayQuantity,loneQuantity,paeQuantity,siQ
         paeQuantity: paeQuantity,
         siQuantity: siQuantity,
         loneUnitPrice: loneUnitPrice,
+        bfLoneQuantity: bfLoneQuantity,
+        bfYwayQuantity: bfYwayQuantity,
+        bfSiQuantity: bfSiQuantity,
         totalAmount: totalAmount,
         kyatAmount: kyatAmount,
-      }, 
+      },
       {
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       }
     );
 
