@@ -28,6 +28,7 @@ import DrawerComponent from "../../components/Drawer/DrawerComponent";
 import BackDropComponent from "../../components/Loading/BackDropComponent";
 import GetCustomerAPI from "../../api/Customer/GetCustomerController";
 import CreateCustomerAPI from "../../api/Customer/CreateCustomerController"; // Import CreateCustomerAPI
+import UpdateCustomerAPI from "../../api/Customer/UpdateCustomerController";
 
 const CustomerPage = ({ history }) => {
   const [customerName, setCustomerName] = useState("");
@@ -71,9 +72,9 @@ const CustomerPage = ({ history }) => {
     setCustomerName("");
   };
 
-  const handleEditOpen = (index) => {
-    setEditCustomerName(customers[index].customerName);
-    setEditCustomerIndex(index);
+  const handleEditOpen = (id,name) => {
+    setEditCustomerName(name);
+    setEditCustomerIndex(id);
     setOpenDialog(true);
   };
 
@@ -87,12 +88,7 @@ const CustomerPage = ({ history }) => {
     setUpdateLoading(true); // Set loading to true when update starts
     try {
       // Simulate API call
-      await axios.put(`/api/edit-customer/${editCustomerIndex}`, { name: editCustomerName });
-      const updatedCustomers = [...customers];
-      updatedCustomers[editCustomerIndex].customerName = editCustomerName;
-      setCustomers(updatedCustomers);
-      toast.success("Customer updated");
-      handleEditClose();
+      await UpdateCustomerAPI(editCustomerIndex,editCustomerName,setOpenDialog,setUpdateLoading,toast,setCustomers);      
     } catch (error) {
       toast.error("Failed to update customer");
     } finally {
@@ -143,6 +139,7 @@ const CustomerPage = ({ history }) => {
           <Table>
             <TableHead>
               <TableRow>
+                <TableCell>Customer ID</TableCell>
                 <TableCell>Customer Name</TableCell>
                 <TableCell align="right">Edit</TableCell>
               </TableRow>
@@ -150,9 +147,10 @@ const CustomerPage = ({ history }) => {
             <TableBody>
               {customers.map((customer, index) => (
                 <TableRow key={index}>
+                <TableCell>{customer.customerID}</TableCell>
                   <TableCell>{customer.customerName}</TableCell>
                   <TableCell align="right">
-                    <IconButton onClick={() => handleEditOpen(index)}>
+                    <IconButton onClick={() => handleEditOpen(customer.customerID,customer.customerName)}>
                       <EditIcon />
                     </IconButton>
                   </TableCell>

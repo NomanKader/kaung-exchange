@@ -1,10 +1,13 @@
 import axios from 'axios';
 import _handleDecryptTokenService from '../../service/crypto/DecryptTokenService';
+import GetCustomerAPI from './GetCustomerController';
 
-const UpdateCustomerAPI = async (customerID, customerName) => {
+const UpdateCustomerAPI = async (customerID, customerName,setOpenDialog,setUpdateLoading,toast,setCustomers) => {
     console.log("Customer ID",customerID);
     console.log("Customer Name",customerName);
+    
   try {
+    setUpdateLoading(true);
     const encryptedToken = sessionStorage.getItem('token');
     if (!encryptedToken) {
       window.location.replace('/');
@@ -26,8 +29,12 @@ const UpdateCustomerAPI = async (customerID, customerName) => {
         'Authorization': `Bearer ${token}`
       }
     });
-
-    return response.data; // Assuming the API returns some data upon success
+    if(response.status==200){     
+      toast.success("Update Successful"); 
+      const data=await GetCustomerAPI();
+      setCustomers(data);
+    }
+    setOpenDialog(false);
   } catch (error) {
     throw error; // Throw error to handle in components
   }
