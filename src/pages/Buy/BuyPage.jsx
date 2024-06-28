@@ -146,6 +146,21 @@ export default function BuyPage({ history }) {
 
     return formattedQuantity;
   };
+  const bfFormatQuantity = () => {
+    let formattedQuantity = "";
+
+    if (unitQuantities.loneQty !== "") {
+      formattedQuantity += `${parseFloat(unitQuantities.bfLoneQty)}လုံး`;
+    }    
+    if (unitQuantities.ywayQty !== "") {
+      formattedQuantity += `${parseFloat(unitQuantities.bfYwayQty)}ရွေး`;
+    }
+    if (unitQuantities.siQty !== "") {
+      formattedQuantity += `${parseFloat(unitQuantities.bfSiQty)}စိ`;
+    }
+
+    return formattedQuantity;
+  };
   const handleRadio = (value) => {
     if (value == "LS") {
       setUnitPrice(parseInt(goldPriceData[0].lonePrice));
@@ -201,8 +216,10 @@ export default function BuyPage({ history }) {
       .then(() => {
         toast.success("Buy successful");
         const quantity = formatQuantity();
+        const bfQuantity=bfFormatQuantity();
         _handlePrintService(
           selectedCustomer.customerName,
+          bfQuantity,
           quantity,
           unitPrice + " ကျပ်",
           totalAmount + " ကျပ်"
@@ -413,8 +430,8 @@ export default function BuyPage({ history }) {
               disabled={loading} // Disable button when loading
             >
               {loading ? "Buying..." : "Buy"}
-            </Button>
-          </Grid>
+            </Button>     
+          </Grid>    
           <Grid item xs={3}>
             <Button
               fullWidth

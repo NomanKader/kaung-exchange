@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 
-const _handleVoucherService = (customerName,quantity, unitPrice, totalAmount) => {
+const _handleVoucherService = (customerName,bfQuantity,quantity, unitPrice, totalAmount) => {
   const todayDate = dayjs().format("YYYY-MM-DD");
   const printContent = `
     <div style="text-align: left;">
@@ -10,7 +10,8 @@ const _handleVoucherService = (customerName,quantity, unitPrice, totalAmount) =>
       <p>ဖုန်း 09-422229119 , 09-400950557 , 09-970395973</p>
       <p>နေ့စွဲ: ${todayDate}</p>
       <p>အမည်: ${customerName}</p>
-      <p>အရေအတွက်: ${quantity}</p>
+      <p>မီးမစစ်ခင် ${bfQuantity}</p>
+      <p>မီးစစ်ပြီ: ${quantity}</p>
       <p>ဈေးနူန်း: ${unitPrice}</p>
       <p>ကျသင့်ငွေ: ${totalAmount}</p>      
     </div>
