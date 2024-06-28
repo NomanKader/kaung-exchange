@@ -6,13 +6,10 @@ import {
   TextField,
   Button,
   Box,
-  CardContent,
   Radio,
   RadioGroup,
   FormControlLabel,
-  FormControl,
-  FormLabel,
-  Paper,
+  FormControl  
 } from "@mui/material";
 import DrawerComponent from "../../components/Drawer/DrawerComponent";
 import theme from "../../theme";
@@ -47,11 +44,31 @@ export default function BuyPage({ history }) {
   const [totalBuyAmount,setTotalBuyAmount]=useState("");
   const [unitType, setUnitType] = useState("LS");
   const [goldPriceData, setGoldPriceData] = useState();
+  const [disableBuy,setDisableBuy]=useState(false);
 
   useEffect(() => {
     fetchCustomers();
     fetchBuyData();
   }, []);
+   
+  useEffect(()=>{
+    if(unitType=='LS'){
+      if(unitQuantities.loneQty!="" && unitQuantities.siQty!="" && unitQuantities.bfLoneQty!="" && unitQuantities.bfSiQty!=""){
+        setDisableBuy(false);
+      }
+      else{
+        setDisableBuy(true);
+      }
+    }
+    else{
+      if(unitQuantities.ywayQty!="" && unitQuantities.bfYwayQty!=""){
+        setDisableBuy(false);
+      }
+      else{
+        setDisableBuy(true);
+      }
+    }
+  },[unitType,unitQuantities])
 
   const fetchBuyData = async () => {
     console.log("Selected Customer", selectedCustomer);
@@ -132,16 +149,16 @@ export default function BuyPage({ history }) {
     let formattedQuantity = "";
 
     if (unitQuantities.loneQty !== "") {
-      formattedQuantity += `${parseFloat(unitQuantities.loneQty)}လုံး`;
+      formattedQuantity += `${parseFloat(unitQuantities.loneQty) || 0}လုံး`;
     }
     if (unitQuantities.paeQty !== "") {
-      formattedQuantity += `${parseFloat(unitQuantities.paeQty)}ပဲ`;
+      formattedQuantity += `${parseFloat(unitQuantities.paeQty) || 0}ပဲ`;
     }
     if (unitQuantities.ywayQty !== "") {
-      formattedQuantity += `${parseFloat(unitQuantities.ywayQty)}ရွေး`;
+      formattedQuantity += `${parseFloat(unitQuantities.ywayQty) || 0}ရွေး`;
     }
     if (unitQuantities.siQty !== "") {
-      formattedQuantity += `${parseFloat(unitQuantities.siQty)}စိ`;
+      formattedQuantity += `${parseFloat(unitQuantities.siQty) || 0}စိ`;
     }
 
     return formattedQuantity;
@@ -150,13 +167,13 @@ export default function BuyPage({ history }) {
     let formattedQuantity = "";
 
     if (unitQuantities.loneQty !== "") {
-      formattedQuantity += `${parseFloat(unitQuantities.bfLoneQty)}လုံး`;
+      formattedQuantity += `${parseFloat(unitQuantities.bfLoneQty) || 0}လုံး`;
     }    
     if (unitQuantities.ywayQty !== "") {
-      formattedQuantity += `${parseFloat(unitQuantities.bfYwayQty)}ရွေး`;
+      formattedQuantity += `${parseFloat(unitQuantities.bfYwayQty) || 0}ရွေး`;
     }
     if (unitQuantities.siQty !== "") {
-      formattedQuantity += `${parseFloat(unitQuantities.bfSiQty)}စိ`;
+      formattedQuantity += `${parseFloat(unitQuantities.bfSiQty) || 0}စိ`;
     }
 
     return formattedQuantity;
@@ -427,7 +444,7 @@ export default function BuyPage({ history }) {
               color="primary"
               fullWidth
               onClick={handleBuy}
-              disabled={loading} // Disable button when loading
+              disabled={disableBuy} // Disable button when loading
             >
               {loading ? "Buying..." : "Buy"}
             </Button>     

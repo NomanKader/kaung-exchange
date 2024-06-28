@@ -10,8 +10,8 @@ const _handleVoucherService = (customerName,bfQuantity,quantity, unitPrice, tota
       <p>ဖုန်း 09-422229119 , 09-400950557 , 09-970395973</p>
       <p>နေ့စွဲ: ${todayDate}</p>
       <p>အမည်: ${customerName}</p>
-      <p>မီးမစစ်ခင် ${bfQuantity}</p>
-      <p>မီးစစ်ပြီ: ${quantity}</p>
+      <p>မီးမစစ်ခင်ရွှေချိန်- ${bfQuantity}</p>
+      <p>မီးစစ်ပြီ:ရွှေချိန်- ${quantity}</p>
       <p>ဈေးနူန်း: ${unitPrice}</p>
       <p>ကျသင့်ငွေ: ${totalAmount}</p>      
     </div>
