@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
-
+import Logo from '../../assets/logo.png';
 const PrintPage = ({history}) => {
   const [customerName, setCustomerName] = useState("");
   const [bfQuantity, setBfQuantity] = useState("");
@@ -38,7 +38,7 @@ const PrintPage = ({history}) => {
   return (
     <div style={{ textAlign: "left" }}>
       <img
-        src="https://i.ibb.co/tbJbPM5/viber-image-2024-06-15-05-54-18-471.jpg"
+        src={Logo}
         alt="Company Logo"
         style={{ width: "100px", height: "auto" }}
       />
