@@ -9,7 +9,7 @@ import {
   Radio,
   RadioGroup,
   FormControlLabel,
-  FormControl  
+  FormControl,
 } from "@mui/material";
 import DrawerComponent from "../../components/Drawer/DrawerComponent";
 import theme from "../../theme";
@@ -19,7 +19,6 @@ import BuyGoldAPI from "../../api/Buy/CreateBuyController";
 import GetCustomerAPI from "../../api/Customer/GetCustomerController";
 import Autocomplete from "@mui/material/Autocomplete";
 import GoldPriceAPI from "../../api/Price/GoldPriceController";
-import _handlePrintService from "../../service/print/PrintService";
 import GetBuyAPI from "../../api/Buy/GetBuyController";
 import dayjs from "dayjs";
 import PaperComponent from "../../components/Paper/PaperComponent";
@@ -41,34 +40,41 @@ export default function BuyPage({ history }) {
   const [loading, setLoading] = useState(false); // State to manage loading state
   const [customerSelected, setCustomerSelected] = useState(true); // State to manage customer selection
   const [totalKyatAmount, setTotalKyatAmount] = useState("");
-  const [totalBuyAmount,setTotalBuyAmount]=useState("");
+  const [totalBuyAmount, setTotalBuyAmount] = useState("");
   const [unitType, setUnitType] = useState("LS");
   const [goldPriceData, setGoldPriceData] = useState();
-  const [disableBuy,setDisableBuy]=useState(false);
+  const [disableBuy, setDisableBuy] = useState(false);
 
   useEffect(() => {
     fetchCustomers();
     fetchBuyData();
+    sessionStorage.removeItem("customerName");
+    sessionStorage.removeItem("bfQuantity");
+    sessionStorage.removeItem("quantity");
+    sessionStorage.removeItem("unitPrice");
+    sessionStorage.removeItem("totalAmount");
   }, []);
-   
-  useEffect(()=>{
-    if(unitType=='LS'){
-      if(unitQuantities.loneQty!="" && unitQuantities.siQty!="" && unitQuantities.bfLoneQty!="" && unitQuantities.bfSiQty!=""){
+
+  useEffect(() => {
+    if (unitType == "LS") {
+      if (
+        unitQuantities.loneQty != "" &&
+        unitQuantities.siQty != "" &&
+        unitQuantities.bfLoneQty != "" &&
+        unitQuantities.bfSiQty != ""
+      ) {
         setDisableBuy(false);
+      } else {
+        setDisableBuy(true);
       }
-      else{
+    } else {
+      if (unitQuantities.ywayQty != "" && unitQuantities.bfYwayQty != "") {
+        setDisableBuy(false);
+      } else {
         setDisableBuy(true);
       }
     }
-    else{
-      if(unitQuantities.ywayQty!="" && unitQuantities.bfYwayQty!=""){
-        setDisableBuy(false);
-      }
-      else{
-        setDisableBuy(true);
-      }
-    }
-  },[unitType,unitQuantities])
+  }, [unitType, unitQuantities]);
 
   const fetchBuyData = async () => {
     console.log("Selected Customer", selectedCustomer);
@@ -82,7 +88,7 @@ export default function BuyPage({ history }) {
       .toFixed(2);
     const totalBuyAmount = response
       .reduce((acc, item) => acc + parseFloat(item.totalAmount), 0)
-      .toFixed(2);    
+      .toFixed(2);
     setTotalKyatAmount(totalKyatAmount);
     setTotalBuyAmount(totalBuyAmount);
   };
@@ -168,7 +174,7 @@ export default function BuyPage({ history }) {
 
     if (unitQuantities.loneQty !== "") {
       formattedQuantity += `${parseFloat(unitQuantities.bfLoneQty) || 0}လုံး`;
-    }    
+    }
     if (unitQuantities.ywayQty !== "") {
       formattedQuantity += `${parseFloat(unitQuantities.bfYwayQty) || 0}ရွေး`;
     }
@@ -195,7 +201,6 @@ export default function BuyPage({ history }) {
   };
   const handleBuy = async () => {
     setLoading(true);
-
     if (!selectedCustomer) {
       toast.error("Please select a customer.");
       setCustomerSelected(false);
@@ -233,14 +238,15 @@ export default function BuyPage({ history }) {
       .then(() => {
         toast.success("Buy successful");
         const quantity = formatQuantity();
-        const bfQuantity=bfFormatQuantity();
-        _handlePrintService(
-          selectedCustomer.customerName,
-          bfQuantity,
-          quantity,
-          unitPrice + " ကျပ်",
-          totalAmount + " ကျပ်"
-        );
+        const bfQuantity = bfFormatQuantity();
+        sessionStorage.setItem("customerName", selectedCustomer.customerName);
+        sessionStorage.setItem("bfQuantity", bfQuantity);
+        sessionStorage.setItem("quantity", quantity);
+        sessionStorage.setItem("unitPrice", unitPrice + " ကျပ်");
+        sessionStorage.setItem("totalAmount", totalAmount + " ကျပ်");
+
+        // Navigate to the print page
+        history.push("/print");
       })
       .catch((error) => {
         toast.error("Error during buy");
@@ -249,6 +255,17 @@ export default function BuyPage({ history }) {
         setLoading(false);
       });
     fetchBuyData();
+  };
+  const print = () => {
+    // Set values in sessionStorage
+    sessionStorage.setItem("customerName", "John Doe");
+    sessionStorage.setItem("bfQuantity", "10g");
+    sessionStorage.setItem("quantity", "9g");
+    sessionStorage.setItem("unitPrice", "50,000 MMK");
+    sessionStorage.setItem("totalAmount", "450,000 MMK");
+
+    // Navigate to the print page
+    history.push("/print");
   };
   const handleClear = () => {
     setSelectedCustomer(null);
@@ -447,8 +464,8 @@ export default function BuyPage({ history }) {
               disabled={disableBuy} // Disable button when loading
             >
               {loading ? "Buying..." : "Buy"}
-            </Button>     
-          </Grid>    
+            </Button>
+          </Grid>
           <Grid item xs={3}>
             <Button
               fullWidth

@@ -6,6 +6,7 @@ import BuyPage from './pages/Buy/BuyPage';
 import NotFoundPage from './pages/Error/NotFoundPage';
 import GoldPricePage from './pages/GoldPrice/GoldPricePage';
 import ReportPage from './pages/Report/ReportPage';
+import PrintPage from './pages/Print/PrintPage';
 export default function App({history}){
   return(
   <Router>    
@@ -16,6 +17,7 @@ export default function App({history}){
       <Route exact path='/customer' component={CustomerPage}/>
       <Route exact path='/goldprice' component={GoldPricePage}/>
       <Route exact path='/report' component={ReportPage}/>
+      <Route exact path='/print' component={PrintPage}/>
       <Route exact path='*' component={NotFoundPage}/>
     </Switch>
   </Router>
