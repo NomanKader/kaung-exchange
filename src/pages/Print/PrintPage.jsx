@@ -17,21 +17,8 @@ const PrintPage = ({history}) => {
     setTotalAmount(sessionStorage.getItem("totalAmount"));
 
     // Add event listener for after print
-    const handleAfterPrint = () => {
-      // Navigate back to Buy page
-      history.push('/buy');
-    };
-
-    window.addEventListener("afterprint", handleAfterPrint);
-
-    // Trigger print dialog
     window.print();
-
-    // Cleanup event listener
-    return () => {
-      window.removeEventListener("afterprint", handleAfterPrint);
-    };
-  }, [history]);
+  }, []);
 
   const todayDate = dayjs().format("YYYY-MM-DD");
 

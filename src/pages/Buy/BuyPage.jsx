@@ -344,6 +344,7 @@ export default function BuyPage({ history }) {
                 <TextField
                   label="Enter BF Lone Qty"
                   fullWidth
+                  type="number"
                   value={unitQuantities.bfLoneQty}
                   onChange={(e) =>
                     setUnitQuantities({
@@ -356,6 +357,7 @@ export default function BuyPage({ history }) {
               <Grid item xs={12} sm={3}>
                 <TextField
                   label="Enter BF Si Qty"
+                  type="number"
                   fullWidth
                   value={unitQuantities.bfSiQty}
                   onChange={(e) =>
