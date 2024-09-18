@@ -17,7 +17,9 @@ const PrintPage = ({history}) => {
     setTotalAmount(sessionStorage.getItem("totalAmount"));
 
     // Add event listener for after print
-    window.print();
+    setTimeout(()=>{
+      window.print();
+    },1500)
   }, []);
 
   const todayDate = dayjs().format("YYYY-MM-DD");
